@@ -49,13 +49,13 @@ $liaison = "CREATE TABLE Liaison(
   ";
 
 try {
-  $dbco = new PDO("mysql:host=$servname;dbname=$dbname", $user, $pass);
+  $dbco = new PDO("mysql:host=$servname", $user, $pass);
   $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  // Création de la base de données s'elle n'existe pas
+  // Crï¿½ation de la base de donnï¿½es s'elle n'existe pas
     $dbco->exec("CREATE DATABASE IF NOT EXISTS $dbname");
     
-    $dbco->exec("USE $dbname"); // Sélectionner la base de données
-
+    $dbco->exec("USE $dbname"); // Sï¿½lectionner la base de donnï¿½es
+    
   if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Panier"')->rowCount() > 0)
     $dbco->exec("DROP TABLE Panier;");
   if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Liaison"')->rowCount() > 0)
@@ -72,7 +72,7 @@ try {
   $dbco->exec($aliment);
   $dbco->exec($panier);
   $dbco->exec($liaison);
-
+  
   foreach ($Hierarchie as $key => $value) {
     if ($key != 'Aliment') {
       $a = "INSERT INTO Aliment VALUES (\"$key\",\"";
