@@ -47,62 +47,60 @@ $liaison = "CREATE TABLE Liaison(
 
 
 try {
-    echo"chien";
-  $dbco = new PDO("mysql:host=$servname", $user, $pass);
-    echo "chien2";
+    $dbco = new PDO("mysql:host=$servname", $user, $pass);
 
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  // Création de la base de données s'elle n'existe pas
+    // Création de la base de données s'elle n'existe pas
     $dbco->exec("CREATE DATABASE IF NOT EXISTS $dbname");
-    echo "chien3";
 
     $dbco->exec("USE $dbname"); // Sélectionner la base de données
 
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Panier"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Panier;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Liaison"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Liaison;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Utilisateur"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Utilisateur;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Cocktail"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Cocktail;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Aliment"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Aliment;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Panier"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Panier;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Liaison"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Liaison;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Utilisateur"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Utilisateur;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Cocktail"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Cocktail;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Aliment"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Aliment;");
 
-  $dbco->exec($utilisateur);
-  $dbco->exec($cocktail);
-  $dbco->exec($aliment);
-  $dbco->exec($panier);
-  $dbco->exec($liaison);
+    $dbco->exec($utilisateur);
+    $dbco->exec($cocktail);
+    $dbco->exec($aliment);
+    $dbco->exec($panier);
+    $dbco->exec($liaison);
 
-  foreach ($Hierarchie as $key => $value) {
-    if ($key != 'Aliment') {
-      $a = "INSERT INTO Aliment VALUES (\"$key\",\"";
-      foreach ($value["super-categorie"] as $key2 => $value2) {
-        if ($key2 > 0) {
-          $a = $a . "," . $value2;
-        } else {
-          $a = $a . $value2;
+    foreach ($Hierarchie as $key => $value) {
+        if ($key != 'Aliment') {
+            $a = "INSERT INTO Aliment VALUES (\"$key\",\"";
+            foreach ($value["super-categorie"] as $key2 => $value2) {
+                if ($key2 > 0) {
+                    $a = $a . "," . $value2;
+                } else {
+                    $a = $a . $value2;
+                }
+            }
+            $a = $a . "\");";
+            $dbco->exec($a);
         }
-      }
-      $a = $a . "\");";
-      $dbco->exec($a);
     }
-  }
 
-  foreach($Recettes as $key => $value){
-    $dbco->exec("INSERT INTO Cocktail VALUES (\"".$value["titre"]."\",\"".$value["ingredients"]."\",\"".str_replace('"', '\"', $value["preparation"])."\");");
-    foreach ($value["index"] as $key2 => $value2) {
+    foreach ($Recettes as $key => $value) {
+        $dbco->exec("INSERT INTO Cocktail VALUES (\"" . $value["titre"] . "\",\"" . $value["ingredients"] . "\",\"" . str_replace('"', '\"', $value["preparation"]) . "\");");
+        foreach ($value["index"] as $key2 => $value2) {
 
-      if (($dbco->query("SELECT * FROM Liaison WHERE NomCocktailU =\"".$value["titre"]."\" AND nomAlimentU=\"".$value2."\";")->rowCount())==0){
-        $dbco->exec("INSERT INTO Liaison VALUES (\"".$value["titre"]."\",\"".$value2."\");");
-      }
+            if (($dbco->query("SELECT * FROM Liaison WHERE NomCocktailU =\"" . $value["titre"] . "\" AND nomAlimentU=\"" . $value2 . "\";")->rowCount()) == 0) {
+                $dbco->exec("INSERT INTO Liaison VALUES (\"" . $value["titre"] . "\",\"" . $value2 . "\");");
+            }
 
+        }
     }
-  }
-
+    echo "installation de la bdd reussi !";
 } catch (PDOException $e) {
 
-  echo "Erreur : " . $e->getMessage();
+    echo "Erreur : " . $e->getMessage();
 }
+?>
