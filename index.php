@@ -15,7 +15,9 @@
         <h2>Rubriques</h2>
         
         <?php             
-            echo "<th colspan='2'><a href='#'>Identification</a></th>";  
+            echo "<th colspan='2'><a href='inscription.php'>Inscription</a></th>";  
+            echo "</br>"; 
+            echo "<th colspan='2'><a href='connexion.php'>Connexion</a></th>";  
             echo "</br>";          
             echo "<th colspan='2'><a href='recettes.php'>Toute les recettes</a></th>";            
             echo "</br>";
