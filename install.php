@@ -20,9 +20,9 @@ $utilisateur = "CREATE TABLE Utilisateur (
                 numTelephone VARCHAR (14))";
 
 $cocktail = "CREATE TABLE Cocktail(
-             nomCocktail VARCHAR (600) PRIMARY KEY,
-             ingredients VARCHAR (2000),
-             preparation VARCHAR (2000))";
+             nomCocktail VARCHAR (100) PRIMARY KEY,
+             ingredients VARCHAR (255),
+             preparation VARCHAR (255))";
 
 $aliment = "CREATE TABLE Aliment(
             nomAliment VARCHAR (60) PRIMARY KEY,
@@ -33,27 +33,30 @@ $panier = "CREATE TABLE Panier(
   nomCocktailP VARCHAR (50),
   dateAjout DATE);
   ALTER TABLE Panier
-  ADD Foreign Key (nomCocktailP) 
+  ADD Foreign Key (nomCocktailP)
   REFERENCES Cocktail(nomCocktail)";
 
 
 $liaison = "CREATE TABLE Liaison(
-  nomCocktailU VARCHAR (600),
-  nomAlimentU VARCHAR (50),
-  PRIMARY KEY (nomAlimentU,nomCocktailU));
-  ALTER TABLE Liaison
-  ADD Foreign Key (nomCocktailU)
-  REFERENCES Cocktail(nomCocktail),
-  ADD Foreign Key (nomAlimentU)
-  REFERENCES Aliment(nomAliment)
-  ";
+  nomCocktailU VARCHAR(100),
+  nomAlimentU VARCHAR(60),
+  PRIMARY KEY (nomAlimentU, nomCocktailU),
+  FOREIGN KEY (nomCocktailU) REFERENCES Cocktail(nomCocktail),
+  FOREIGN KEY (nomAlimentU) REFERENCES Aliment(nomAliment)
+)";
+
 
 try {
-  $dbco = new PDO("mysql:host=$servname;dbname=$dbname", $user, $pass);
-  $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo"chien";
+  $dbco = new PDO("mysql:host=$servname", $user, $pass);
+    echo "chien2";
+
+    $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
   // Création de la base de données s'elle n'existe pas
     $dbco->exec("CREATE DATABASE IF NOT EXISTS $dbname");
-    
+    echo "chien3";
+
     $dbco->exec("USE $dbname"); // Sélectionner la base de données
 
   if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Panier"')->rowCount() > 0)
@@ -91,11 +94,11 @@ try {
   foreach($Recettes as $key => $value){
     $dbco->exec("INSERT INTO Cocktail VALUES (\"".$value["titre"]."\",\"".$value["ingredients"]."\",\"".str_replace('"', '\"', $value["preparation"])."\");");
     foreach ($value["index"] as $key2 => $value2) {
-      
+
       if (($dbco->query("SELECT * FROM Liaison WHERE NomCocktailU =\"".$value["titre"]."\" AND nomAlimentU=\"".$value2."\";")->rowCount())==0){
         $dbco->exec("INSERT INTO Liaison VALUES (\"".$value["titre"]."\",\"".$value2."\");");
       }
-      
+
     }
   }
 
