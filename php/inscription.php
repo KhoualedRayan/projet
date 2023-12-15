@@ -1,3 +1,22 @@
+<?php
+include '../Donnees.inc.php';
+
+$servname = 'localhost';
+$dbname = 'MaBase';
+$user = 'root';
+$pass = '';
+session_start();
+try {
+    $dbco = new PDO("mysql:host=$servname", $user, $pass);
+    $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbco = new PDO("mysql:host=$servname", $user, $pass);
+    $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbco->exec("USE $dbname"); // S�lectionner la base de donn�es
+} catch (PDOException $e) {
+
+    echo "Erreur : " . $e->getMessage();
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

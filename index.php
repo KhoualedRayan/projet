@@ -5,6 +5,7 @@ $servname = 'localhost';
 $dbname = 'MaBase';
 $user = 'root';
 $pass = '';
+session_start();
 try {
     $dbco = new PDO("mysql:host=$servname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
