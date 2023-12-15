@@ -18,24 +18,50 @@
             <ul>
                 <li><a href='inscription.php'>Inscription</a></li>
                 <br>
-                    <li><a href='connexion.php'>Connexion</a></li>
+                <li><a href='connexion.php'>Connexion</a></li>
                 </br>
-                <li><a href='recettes.php'>Toute les recettes</a></li>
+                <li><a href='recettes.php'>Toutes les recettes</a></li>
                 <br>
-                    <li><a href='#'>Mes recettes préférées</a></li>
+                <li><a href='#'>Mes recettes préférées</a></li>
                 </br>
             </ul>
         </div>
     </nav>
 
-
     <main>
-
-        <?php
-
-        ?>
-
+        <h2>Hiérarchie des aliments</h2>
+        <div id="hierarchie-container">
+            <!-- Le contenu de hierarchie_aliments.php sera chargé ici -->
+        </div>
     </main>
+
+    <script>
+        $(document).ready(function () {
+            // Fonction pour charger les sous-aliments au chargement de la page
+            function chargerSousAliments(mot) {
+                $.ajax({
+                    type: "POST",
+                    url: "hierarchie_aliments.php",
+                    data: { mot: mot },
+                    success: function (response) {
+                        $("#hierarchie-container").html(response);
+                    },
+                    error: function () {
+                        alert("Une erreur s'est produite lors du chargement de la hiérarchie.");
+                    }
+                });
+            }
+
+            // Charger les sous-aliments initiaux pour la catégorie "Aliment"
+            chargerSousAliments("Aliment");
+
+            // Fonction de gestion du clic sur un élément
+            $(document).on("click", ".mot-cliquable", function () {
+                var motClique = $(this).text();
+                chargerSousAliments(motClique);
+            });
+        });
+    </script>
 
     <footer>
         <p> © Ma boutique à moi</p>
