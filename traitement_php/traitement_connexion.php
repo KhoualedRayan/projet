@@ -6,6 +6,7 @@ $dbname = 'MaBase';
 $user = 'root';
 $pass = '';
 
+
 try {
     $dbco = new PDO("mysql:host=$servname;dbname=$dbname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -17,28 +18,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST["login"];
     $mdp = $_POST["mdp"];
 
-    // Requête préparée pour récupérer le compte correspondant au login
-    try {
-        $stmt = $dbco->prepare("SELECT * FROM utilisateur WHERE login = ?");
-        $stmt->execute([$login]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo "Erreur de requête : " . $e->getMessage();
-    }
+    $stmt = $dbco->prepare('SELECT * FROM utilisateur WHERE login = :login');
+    $stmt->bindValue('login', $login);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if ($user) {
         echo "Mot de passe saisi : $mdp<br>";
-
-        echo "Mot de passe haché dans la base de données : " . $user['motDePasse'] ;
+        $passwordHash = $user['motDePasse'];
+        echo "Mot de passe haché dans la base de données : " . $passwordHash;
         echo "<br/>";
 
-    }
-
-
-    if ($user && password_verify($mdp, $user['motDePasse'])) {
-        // Connectez l'utilisateur ici (vous pouvez implémenter votre logique de connexion)
-        echo "Connexion réussie !";
+        if (password_verify($mdp, $user['motDePasse'])) {
+            session_start();
+            // Stocker des informations de connexion dans la session
+            $_SESSION['utilisateur_connecte'] = true;
+            $_SESSION['nom_utilisateur'] = $login;
+            echo "Connexion réussi ! Redirection vers la page de l'index.";
+            header("Location: ../index.php");
+            exit();
+        } else {
+            echo "Erreur lors de la connexion. Redirection vers la page de connexion...";
+            header("Location: ../php/connexion.php");
+            exit();
+        }
     } else {
-        echo "Identifiants invalides. Veuillez réessayer.";
+        echo "Utilisateur non trouvé.";
+        header("Location: ../php/connexion.php");
+        exit();
     }
+
+
+
+
 }
 ?>

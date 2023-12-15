@@ -1,70 +1,89 @@
 
-	body { 
-		font-family: Arial, Helvetica, sans-serif;
-	    font-size: 1em;
-		color: black;
-	}
-	  	
-    #content { 
-		background-color: #eee; 
-	    margin-top: -1px;
-		margin-bottom: -1px;
-	} 
-	
-	header, #content, footer, nav, main {
-	    position:relative;
-		border: black solid 1px;
-	}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1em;
+    color: black;
+}
 
-	table {
-		border: 1;
-	}
-		
-    nav { 
-	    float: left;
-        width: 200px;
-		border-left:0;
-		border-bottom: solid 0px;
-		margin-top: -1px;
-	}
-	  
-	main { 
-		background-color: #aaa;
-		margin-top: -1px;	  
-	    margin-left:200px;
-		padding: 10px;
-		border-bottom: 0;
-		border-right: 0;
-		min-height:180px
-	}
-	  
-	
-  	nav ul    { 
-		margin: 0; 
-		padding: 0;
-	}
-	
-	nav ul li { 
-		margin: 0; 
-		padding: 0; 
-	    list-style-type:none; 
-	}
-	
-	nav ul li a {
-		margin:0; 
-		padding:0 10px; 
-		display:block; 
-	} 
-	  	  
-	a {
-		text-decoration: none; 
-	    color: green;
-	}
-	  
-	nav ul li a:hover {
-		background-color: #555; 
-		color: white;
-	}
-	footer {
-		margin-top: -2px;		
-	}
+#content {
+    background-color: #eee;
+    margin-top: -1px;
+    margin-bottom: -1px;
+}
+
+#compte {
+    color: red;
+    background-color: lightblue; /* Ajoutez cette ligne pour le fond bleu */
+    padding: 10px; /* Ajoutez cette ligne pour l'espacement interne */
+    text-align: right; /* Ajoutez cette ligne pour aligner le texte à droite */
+}
+
+
+header, #content, footer, nav, main {
+    position: relative;
+    border: black solid 1px;
+}
+
+table {
+    border: 1;
+}
+
+nav {
+    float: left;
+    width: 200px;
+    border-left: 0;
+    border-bottom: solid 0px;
+    margin-top: -1px;
+}
+
+main {
+    background-color: #aaa;
+    margin-top: -1px;
+    margin-left: 200px;
+    padding: 10px;
+    border-bottom: 0;
+    border-right: 0;
+    min-height: 180px
+}
+
+
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+    nav ul li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+        nav ul li a {
+            margin: 0;
+            padding: 0 10px;
+            display: block;
+        }
+
+a {
+    text-decoration: none;
+    color: green;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+    color: white;
+}
+
+footer {
+    margin-top: -2px;
+}
+.cocktail-image {
+    width: 100px; /* Ajuste la taille selon tes besoins */
+    height: 100px; /* Ajuste la taille selon tes besoins */
+}
+.tab-image{
+    background-color:lightblue;
+}
+.tab-image-ligne {
+    background-color: cornflowerblue;
+}
