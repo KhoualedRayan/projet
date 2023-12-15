@@ -17,6 +17,7 @@ $utilisateur = "CREATE TABLE Utilisateur (
                 sexe VARCHAR (1),
                 adresse VARCHAR (60),
                 codePostal INTEGER (5),
+                ville VARCHAR (60),
                 numTelephone VARCHAR (14))";
 
 $cocktail = "CREATE TABLE Cocktail(
