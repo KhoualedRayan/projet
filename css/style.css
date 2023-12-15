@@ -77,3 +77,13 @@ nav ul li a:hover {
 footer {
     margin-top: -2px;
 }
+.cocktail-image {
+    width: 100px; /* Ajuste la taille selon tes besoins */
+    height: 100px; /* Ajuste la taille selon tes besoins */
+}
+.tab-image{
+    background-color:lightblue;
+}
+.tab-image-ligne {
+    background-color: cornflowerblue;
+}
