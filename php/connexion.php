@@ -1,5 +1,5 @@
 <?php
-include 'Donnees.inc.php';
+include '../Donnees.inc.php';
 
 $servname = 'localhost';
 $dbname = 'MaBase';
@@ -22,7 +22,7 @@ try {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../style.css" />
     <title>Index</title>
 </head>
 <body>
@@ -34,11 +34,11 @@ try {
         <div id="content">
             <h2>Rubriques</h2>
             <ul>
-                <li><a href='php/inscription.php'>Inscription</a></li>
+                <li><a href='inscription.php'>Inscription</a></li>
                 <br>
-                    <li><a href='php/connexion.php'>Connexion</a></li>
+                    <li><a href='connexion.php'>Connexion</a></li>
                 </br>
-                <li><a href='php/recettes.php'>Toute les recettes</a></li>
+                <li><a href='recettes.php'>Toute les recettes</a></li>
                 <br>
                     <li><a href='#'>Mes recettes préférées</a></li>
                 </br>
@@ -46,7 +46,18 @@ try {
         </div>
     </nav>
 
-    <main></main>
+    <main>
+        <h4>Veuillez remplir le formulaire :</h4>
+        <form action="../traitement_php/traitement_connexion.php" method="post">
+            <label for="login">Login :</label>
+            <input type="text" name="login" required /><br />
+
+            <label for="mdp">Mot de passe :</label>
+            <input type="password" name="mdp" required /><br /><br />
+
+            <input type="submit" value="Valider" />
+        </form>
+    </main>
 
     <footer>
         <p> ©Ma boutique à moi</p>
