@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             echo "Erreur lors de l'inscription. Redirection vers la page d'inscription...";
-            header("Location: ../traitement_php/inscription.php");
+            header("Location: ../php/inscription.php");
             exit();
         }
     }

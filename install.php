@@ -9,7 +9,7 @@ $pass = '';
 
 $utilisateur = "CREATE TABLE Utilisateur (
                 login VARCHAR(60) NOT NULL PRIMARY KEY,
-                motDePasse VARCHAR(16) NOT NULL,
+                motDePasse VARCHAR(255) NOT NULL,
                 nom VARCHAR(60),
                 prenom VARCHAR(60),
                 dateNaissance DATE,
