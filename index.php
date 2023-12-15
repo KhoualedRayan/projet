@@ -28,6 +28,17 @@ try {
 <body>
     <header>
         <h1>Boutique de nourriture MIAM</h1>
+        <div id="compte">
+            <?php
+            if (isset($_SESSION['utilisateur_connecte'])) {
+                // Récupérer le nom de l'utilisateur depuis la session
+                $nomUtilisateur = $_SESSION['nom_utilisateur'];
+
+                // Afficher le nom de l'utilisateur dans le HEADER
+                echo 'Bienvenue, ' . $nomUtilisateur . '!';
+            }
+            ?>
+        </div>
     </header>
 
     <nav>

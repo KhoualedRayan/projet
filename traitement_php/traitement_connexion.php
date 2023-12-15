@@ -6,6 +6,7 @@ $dbname = 'MaBase';
 $user = 'root';
 $pass = '';
 
+
 try {
     $dbco = new PDO("mysql:host=$servname;dbname=$dbname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -29,6 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<br/>";
 
         if (password_verify($mdp, $user['motDePasse'])) {
+            session_start();
+            // Stocker des informations de connexion dans la session
+            $_SESSION['utilisateur_connecte'] = true;
+            $_SESSION['nom_utilisateur'] = $login;
             echo "Connexion réussi ! Redirection vers la page de l'index.";
             header("Location: ../index.php");
             exit();
