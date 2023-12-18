@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include '../Donnees.inc.php';
 
 $servname = 'localhost';
@@ -17,18 +17,18 @@ try {
     echo "Erreur : " . $e->getMessage();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/style.css" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <title>Recettes</title>
+    <title>Index</title>
 </head>
 <body>
     <header>
-        <h1>Recettes</h1>
+        <h1>Boutique de nourriture MIAM</h1>
         <div id="compte">
             <?php
             if (isset($_SESSION['utilisateur_connecte'])) {
@@ -52,51 +52,20 @@ try {
                 <br>
                     <li><a href='connexion.php'>Connexion</a></li>
                 </br>
-                <li><a href='recettes.php'>Toutes les recettes</a></li>
+                <li><a href='recettes.php'>Toute les recettes</a></li>
                 <br>
-                <li><a href='panier.php'>Panier</a></li>
+                    <li><a href='panier.php'>Panier</a></li>
                 </br>
             </ul>
         </div>
     </nav>
 
     <main>
-        <h2>Hiérarchie des aliments</h2>
-        <div id="hierarchie-container">
-            <!-- Le contenu de hierarchie_aliments.php sera chargé ici -->
-        </div>
+        <h2>Panier : </h2>
     </main>
 
-    <script>
-        $(document).ready(function () {
-            // Fonction pour charger les sous-aliments au chargement de la page
-            function chargerSousAliments(mot) {
-                $.ajax({
-                    type: "POST",
-                    url: "hierarchie_aliments.php",
-                    data: { mot: mot },
-                    success: function (response) {
-                        $("#hierarchie-container").html(response);
-                    },
-                    error: function () {
-                        alert("Une erreur s'est produite lors du chargement de la hiérarchie.");
-                    }
-                });
-            }
-
-            // Charger les sous-aliments initiaux pour la catégorie "Aliment"
-            chargerSousAliments("Aliment");
-
-            // Fonction de gestion du clic sur un élément
-            $(document).on("click", ".mot-cliquable", function () {
-                var motClique = $(this).text();
-                chargerSousAliments(motClique);
-            });
-        });
-    </script>
-
     <footer>
-        <p> © Ma boutique à moi</p>
+        <p> ©Ma boutique à moi</p>
     </footer>
 </body>
 </html>

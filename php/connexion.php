@@ -54,7 +54,7 @@ try {
                 </br>
                 <li><a href='recettes.php'>Toute les recettes</a></li>
                 <br>
-                    <li><a href='#'>Mes recettes préférées</a></li>
+                    <li><a href='panier.php'>Panier</a></li>
                 </br>
             </ul>
         </div>
