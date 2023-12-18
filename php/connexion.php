@@ -46,6 +46,8 @@ try {
         <div id="content">
             <h2>Rubriques</h2>
             <ul>
+                <li><a href='../index.php'>Accueil</a></li>
+                <br />
                 <li><a href='inscription.php'>Inscription</a></li>
                 <br>
                     <li><a href='connexion.php'>Connexion</a></li>

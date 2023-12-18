@@ -25,7 +25,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    
+
     <title>Index</title>
 </head>
 <body>
@@ -48,6 +48,8 @@ try {
         <div id="content">
             <h2>Rubriques</h2>
             <ul>
+                <li><a href='index.php'>Accueil</a></li>
+                <br />
                 <li><a href='php/inscription.php'>Inscription</a></li>
                 <br>
                     <li><a href='php/connexion.php'>Connexion</a></li>
@@ -75,8 +77,11 @@ try {
             echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 echo '<tr>';
-                // Colonne de la photo (assumant que le nom de la photo est le nom du cocktail)
-                $imagePath = "Photos/{$row['nomCocktail']}.jpg";
+                // Colonne de la photo
+                $nomCocktail = $row['nomCocktail'];
+                $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
+                $nomCocktail = strtr($nomCocktail, $accents);
+                $imagePath = "Photos/{$nomCocktail}.jpg";
                 if (file_exists($imagePath)) {
                     echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktail'] . '"></td>';
                 } else {

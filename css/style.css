@@ -13,9 +13,9 @@ body {
 
 #compte {
     color: red;
-    background-color: lightblue; /* Ajoutez cette ligne pour le fond bleu */
-    padding: 10px; /* Ajoutez cette ligne pour l'espacement interne */
-    text-align: right; /* Ajoutez cette ligne pour aligner le texte à droite */
+    background-color: lightblue; 
+    padding: 10px; 
+    text-align: right; 
 }
 
 
@@ -75,7 +75,9 @@ nav ul li a:hover {
 }
 
 footer {
+    clear: both;
     margin-top: -2px;
+    border: 1px solid black;
 }
 .cocktail-image {
     width: 100px; /* Ajuste la taille selon tes besoins */

@@ -53,9 +53,9 @@ try {
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Cr�ation de la base de donn�es s'elle n'existe pas
-  $dbco = new PDO("mysql:host=$servname", $user, $pass);
-  $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  // Cr�ation de la base de donn�es s'elle n'existe pas
+    $dbco = new PDO("mysql:host=$servname", $user, $pass);
+    $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Cr�ation de la base de donn�es s'elle n'existe pas
     $dbco->exec("CREATE DATABASE IF NOT EXISTS $dbname");
 
     $dbco->exec("USE $dbname"); // S�lectionner la base de donn�es
@@ -70,24 +70,24 @@ try {
         $dbco->exec("DROP TABLE Cocktail;");
     if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Aliment"')->rowCount() > 0)
         $dbco->exec("DROP TABLE Aliment;");
-    
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Panier"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Panier;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Liaison"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Liaison;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Utilisateur"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Utilisateur;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Cocktail"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Cocktail;");
-  if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Aliment"')->rowCount() > 0)
-    $dbco->exec("DROP TABLE Aliment;");
+
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Panier"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Panier;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Liaison"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Liaison;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Utilisateur"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Utilisateur;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Cocktail"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Cocktail;");
+    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Aliment"')->rowCount() > 0)
+        $dbco->exec("DROP TABLE Aliment;");
 
     $dbco->exec($utilisateur);
     $dbco->exec($cocktail);
     $dbco->exec($aliment);
     $dbco->exec($panier);
     $dbco->exec($liaison);
-  
+
     foreach ($Hierarchie as $key => $value) {
         if ($key != 'Aliment') {
             $a = "INSERT INTO Aliment VALUES (\"$key\",\"";
