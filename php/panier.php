@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include '../Donnees.inc.php';
 
 $servname = 'localhost';
@@ -24,6 +24,7 @@ try {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/panier.js" defer></script>
     <title>Index</title>
 </head>
 <body>
@@ -62,6 +63,27 @@ try {
 
     <main>
         <h2>Panier : </h2>
+        <?php
+        if (isset($_SESSION['utilisateur_connecte'])) {
+
+            $query = "SELECT * FROM Panier WHERE loginP = :login";
+            $stmt = $dbco->prepare($query);
+            $stmt->bindParam(':login', $nomUtilisateur, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                afficherTab($stmt);
+            } else {
+                echo 'Le panier est vide.';
+            }
+        } else {
+            echo 'L\'utilisateur n\'est pas connecté.';
+        }
+
+
+
+        ?>
     </main>
 
     <footer>
@@ -69,3 +91,31 @@ try {
     </footer>
 </body>
 </html>
+<?php
+function afficherTab($stmt){
+    echo '<table border="1" class="tab-image">';
+    echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Supprimer du panier</th></tr>';
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo '<tr>';
+        // Colonne de la photo
+        $nomCocktail = $row['nomCocktailP'];
+        $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
+        $nomCocktail = strtr($nomCocktail, $accents);
+        $imagePath = "../Photos/{$nomCocktail}.jpg";
+        if (file_exists($imagePath)) {
+            echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktailP'] . '"></td>';
+        } else {
+            echo '<td class ="cocktail-image"></td>';
+        }
+        // Colonne du nom du cocktail
+        echo '<td>' . $row['nomCocktailP'] . '</td>';
+
+        echo '<td>';
+        echo '<button class="supprimerDuPanier" data-cocktail="' . $row['id'] . '">Supprimer du Panier</button>';
+
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+}
+?>

@@ -9,8 +9,6 @@ session_start();
 try {
     $dbco = new PDO("mysql:host=$servname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $dbco = new PDO("mysql:host=$servname", $user, $pass);
-    $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $dbco->exec("USE $dbname"); // S�lectionner la base de donn�es
 } catch (PDOException $e) {
 
@@ -24,6 +22,7 @@ try {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
+    <script src="js/index.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <title>Index</title>
@@ -94,7 +93,8 @@ try {
                 // Colonne des ingrédients
                 echo '<td>' . $row['ingredients'] . '</td>';
                 echo '<td>';
-                echo '<button onclick="ajouterAuPanier(\'' . $row['nomCocktail'] . '\')">Ajouter au Panier</button>';
+                echo '<button class="addToCart" data-cocktail="' . htmlspecialchars($row['nomCocktail']) . '">Ajouter au Panier</button>';
+
                 echo '</td>';
                 echo '</tr>';
             }

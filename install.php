@@ -1,5 +1,5 @@
 <?php
-
+session_destroy();
 include 'Donnees.inc.php';
 
 $servname = 'localhost';
@@ -30,12 +30,14 @@ $aliment = "CREATE TABLE Aliment(
             pereAliment VARCHAR (60))";
 
 $panier = "CREATE TABLE Panier(
-  loginP VARCHAR (50) PRIMARY KEY,
-  nomCocktailP VARCHAR (50),
-  dateAjout DATE);
-  ALTER TABLE Panier
-  ADD Foreign Key (nomCocktailP)
-  REFERENCES Cocktail(nomCocktail)";
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  loginP VARCHAR (60),
+  nomCocktailP VARCHAR (100),
+  dateAjout DATE,
+  FOREIGN KEY (nomCocktailP) REFERENCES Cocktail(nomCocktail),
+  FOREIGN KEY (loginP) REFERENCES Utilisateur(login)
+)";
+
 
 
 $liaison = "CREATE TABLE Liaison(
@@ -114,6 +116,8 @@ try {
         }
     }
     echo "installation de la bdd reussi !";
+    header("Location: index.php");
+    exit();
 } catch (PDOException $e) {
 
     echo "Erreur : " . $e->getMessage();

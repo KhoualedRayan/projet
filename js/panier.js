@@ -1,10 +1,10 @@
 $(document).ready(function () {
-    $(document).on('click', '.addToCart', function () {
+    $(document).on('click', '.supprimerDuPanier', function () {
         var nomCocktail = $(this).data('cocktail');
         $.ajax({
             type: 'POST',
-            url: 'traitement_php/traitement_ajout_panier.php',
-            data: { nomCocktail: nomCocktail },
+            url: 'traitement_php/traitement_supprimer_panier.php',
+            data: { id: id },
             success: function (response) {
                 console.log(nomCocktail);
                 alert('Cocktail ajouté au panier avec succès !');

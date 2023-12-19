@@ -18,6 +18,16 @@ try {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
     $login = $_POST["login"];
+    // Verif login unique
+    $verifLogin = $dbco->prepare("SELECT COUNT(*) FROM utilisateur WHERE login = ?");
+    $verifLogin->bindParam(1, $login);
+    $verifLogin->execute();
+    $count = $verifLogin->fetchColumn();
+    //login existe déjà
+    if ($count > 0) {
+        echecInscription();
+    }
+    //login unique
     $mdp = $_POST["mdp"];
     $nom = $_POST["nom"];
     $prenom = $_POST["prenom"];
@@ -55,14 +65,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Exécuter la requête
         if ($stmt->execute()) {
-            echo "Inscription réussi ! Redirection vers la page de l'index.";
-            header("Location: ../index.php");
-            exit();
+            reussiteInscription();
         } else {
-            echo "Erreur lors de l'inscription. Redirection vers la page d'inscription...";
-            header("Location: ../php/inscription.php");
-            exit();
+            echecInscription();
         }
     }
+}
+function echecInscription(){
+    echo "Erreur lors de l'inscription. Redirection vers la page d'inscription...";
+    header("Location: ../php/inscription.php");
+    exit();
+}function reussiteInscription(){
+    echo "Inscription réussi ! Redirection vers la page de l'index.";
+    header("Location: ../index.php");
+    exit();
+}
+function verifLogin(){
+    
 }
 ?>
