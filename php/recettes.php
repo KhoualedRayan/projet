@@ -38,6 +38,7 @@ try {
                 // Afficher le nom de l'utilisateur dans le HEADER
                 echo 'Bienvenue, ' . $nomUtilisateur . '!';
             }
+            
             ?>
         </div>
     </header>
@@ -46,15 +47,13 @@ try {
         <div id="content">
             <h2>Rubriques</h2>
             <ul>
-                <li><a href='../index.php'>Accueil</a></li>
-                <br />
                 <li><a href='inscription.php'>Inscription</a></li>
                 <br>
-                    <li><a href='connexion.php'>Connexion</a></li>
+                <li><a href='connexion.php'>Connexion</a></li>
                 </br>
                 <li><a href='recettes.php'>Toutes les recettes</a></li>
                 <br>
-                <li><a href='panier.php'>Panier</a></li>
+                <li><a href='#'>Mes recettes préférées</a></li>
                 </br>
             </ul>
         </div>
@@ -83,7 +82,6 @@ try {
                     }
                 });
             }
-
             // Charger les sous-aliments initiaux pour la catégorie "Aliment"
             chargerSousAliments("Aliment");
 
