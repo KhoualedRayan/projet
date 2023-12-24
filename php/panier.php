@@ -26,11 +26,11 @@ try {
     <link rel="stylesheet" href="../css/style.css" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../js/panier.js" defer></script>
-    <title>Index</title>
+    <title>Panier</title>
 </head>
 <body>
     <header>
-        <h1>Boutique de nourriture MIAM</h1>
+        <h1>Panier</h1>
         <div id="compte">
             <?php
             if (isset($_SESSION['utilisateur_connecte'])) {
@@ -51,16 +51,16 @@ try {
                 <li><a href='../index.php'>Accueil</a></li>
                 <br />
                 <li><a href='inscription.php'>Inscription</a></li>
-                <br>
-                    <li><a href='connexion.php'>Connexion</a></li>
-                    <br>
+                <br />
+                <li><a href='connexion.php'>Connexion</a></li>
+                <br />
                 <?php
                 if (isset($_SESSION['utilisateur_connecte'])) {
                     echo "<li><a href='profil.php'>Profil</a></li>";
                     echo '<br/>';
                 }
                 ?>
-                <li><a href='recettes.php'>Toute les recettes</a></li>
+                <li><a href='recettes.php'>Toutes les recettes</a></li>
                 <br>
                     <li><a href='panier.php'>Panier</a></li>
                 </br>
@@ -99,7 +99,7 @@ try {
     </main>
 
     <footer>
-        <p> ©Ma boutique à moi</p>
+        <p> Un site développé par Thomas et Rayan.</p>
     </footer>
 </body>
 </html>

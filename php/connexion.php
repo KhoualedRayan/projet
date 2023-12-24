@@ -24,11 +24,11 @@ try {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/style.css" />
-    <title>Index</title>
+    <title>Connexion</title>
 </head>
 <body>
     <header>
-        <h1>Boutique de nourriture MIAM</h1>
+        <h1>Connexion</h1>
         <div id="compte">
             <?php
             if (isset($_SESSION['utilisateur_connecte'])) {
@@ -58,7 +58,7 @@ try {
                     echo '<br/>';
                 }
                 ?>
-                <li><a href='recettes.php'>Toute les recettes</a></li>
+                <li><a href='recettes.php'>Toutes les recettes</a></li>
                 <br>
                     <li><a href='panier.php'>Panier</a></li>
                 </br>
@@ -80,7 +80,7 @@ try {
     </main>
 
     <footer>
-        <p> ©Ma boutique à moi</p>
+        <p> Un site développé par Thomas et Rayan.</p>
     </footer>
 </body>
 </html>

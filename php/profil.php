@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include '../Donnees.inc.php';
 
 $servname = 'localhost';
@@ -27,7 +27,7 @@ try {
 </head>
 <body>
     <header>
-        <h1>Boutique de nourriture MIAM</h1>
+        <h1>Profil</h1>
         <div id="compte">
             <?php
             if (isset($_SESSION['utilisateur_connecte'])) {
@@ -57,7 +57,7 @@ try {
                     echo'<br/>';
                 }
                 ?>
-                    <li><a href='recettes.php'>Toute les recettes</a></li>
+                    <li><a href='recettes.php'>Toutes les recettes</a></li>
                 </br>
                 <li><a href='panier.php'>Panier</a></li>
                 <br />
@@ -123,7 +123,7 @@ try {
     </main>
 
     <footer>
-        <p> © Ma boutique à moi</p>
+        <p> Un site développé par Thomas et Rayan.</p>
     </footer>
 </body>
 </html>

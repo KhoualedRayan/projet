@@ -47,10 +47,12 @@ try {
         <div id="content">
             <h2>Rubriques</h2>
             <ul>
+                <li><a href='../index.php'>Accueil</a></li>
+                <br />
                 <li><a href='inscription.php'>Inscription</a></li>
-                <br>
+                <br />
                 <li><a href='connexion.php'>Connexion</a></li>
-                </br>
+                <br />
                 <?php
                 if (isset($_SESSION['utilisateur_connecte'])) {
                     echo "<li><a href='profil.php'>Profil</a></li>";
@@ -59,7 +61,7 @@ try {
                 ?>
                 <li><a href='recettes.php'>Toutes les recettes</a></li>
                 <br>
-                <li><a href='#'>Mes recettes préférées</a></li>
+                    <li><a href='panier.php'>Panier</a></li>
                 </br>
             </ul>
         </div>
@@ -100,7 +102,7 @@ try {
     </script>
 
     <footer>
-        <p> © Ma boutique à moi</p>
+        <p> Un site développé par Thomas et Rayan.</p>
     </footer>
 </body>
 </html>
