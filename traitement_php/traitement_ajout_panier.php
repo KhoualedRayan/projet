@@ -26,10 +26,26 @@ if (isset($_POST['nomCocktail'])) {
         $stmt->bindParam(':dateAjout', $dateActuelle, PDO::PARAM_STR);
         try {
             $stmt->execute();
-            echo 'Succès'; 
+            echo 'Succès';
         } catch (PDOException $e) {
-            echo 'Erreur : ' . $e->getMessage(); 
+            echo 'Erreur : ' . $e->getMessage();
         }
+    }
+    else{
+        //Utilisateur pas connecté, stockage temporaire
+        //stocker les cocktails temporairement
+        if (!isset($_SESSION['panier_temporaire'])) {
+            // Si la variable de session pour le panier temporaire n'existe pas, initialisez-la
+            $_SESSION['panier_temporaire'] = array();
+        }
+        $cocktailTemporaire = array(
+            'nomCocktail' => $nomCocktail,
+            'dateAjout' => date('Y-m-d H:i:s')
+        );
+
+        $_SESSION['panier_temporaire'][] = $cocktailTemporaire;
+
+        echo 'Cocktail ajouté au panier temporaire';
     }
 } else {
     echo 'Paramètres manquants';

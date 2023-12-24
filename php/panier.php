@@ -85,7 +85,12 @@ try {
                 echo 'Le panier est vide.';
             }
         } else {
-            echo 'L\'utilisateur n\'est pas connecté.';
+            if (isset($_SESSION['panier_temporaire']) && !empty($_SESSION['panier_temporaire'])) {
+                echo '<h3>Cocktails temporaires :</h3>';
+                afficherTabTemporaire($_SESSION['panier_temporaire']);
+            } else {
+                echo 'Panier temporaire vide.';
+            }
         }
 
 
@@ -126,4 +131,34 @@ function afficherTab($stmt)
     }
     echo '</table>';
 }
+function afficherTabTemporaire($panierTemporaire)
+{
+    echo '<table border="1" class="tab-image">';
+    echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Date d\'ajout temporaire</th><th>Supprimer du panier</th></tr>';
+    foreach ($panierTemporaire as $cocktailTemporaire) {
+        echo '<tr>';
+        // Colonne de la photo
+        $nomCocktailTemporaire = $cocktailTemporaire['nomCocktail'];
+        $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
+        $nomCocktailTemporaire = strtr($nomCocktailTemporaire, $accents);
+        $imagePath = "../Photos/{$nomCocktailTemporaire}.jpg";
+        if (file_exists($imagePath)) {
+            echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $cocktailTemporaire['nomCocktail'] . '"></td>';
+        } else {
+            echo '<td class ="cocktail-image"></td>';
+        }
+        // Colonne du nom du cocktail temporaire
+        echo '<td>' . $cocktailTemporaire['nomCocktail'] . '</td>';
+        // Colonne de la date d'ajout temporaire
+        echo '<td>' . $cocktailTemporaire['dateAjout'] . '</td>';
+
+        echo '<td>';
+        echo '<button class="supprimerDuPanierTemporaire" data-cocktail="' . $cocktailTemporaire['dateAjout'] . '">Supprimer du panier temporaire</button>';
+
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+}
+
 ?>

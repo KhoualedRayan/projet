@@ -7,6 +7,7 @@ $servname = 'localhost';
 $dbname = 'MaBase';
 $user = 'root';
 $pass = '';
+session_start();
 try {
     $dbco = new PDO("mysql:host=$servname;dbname=$dbname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -36,5 +37,16 @@ if (isset($_POST['idCocktail'])) {
 } else {
     echo 'Paramètres manquants';
 }
-
+if (isset($_POST['dateCocktail'])) {
+    $dateCocktail = $_POST['dateCocktail'];
+    if (!isset($_SESSION['utilisateur_connecte'])) {
+        foreach ($_SESSION['panier_temporaire'] as $index => $cocktailTemporaire) {
+            if ($cocktailTemporaire['dateAjout'] == $dateCocktail) {
+                unset($_SESSION['panier_temporaire'][$index]);
+                echo 'Cocktail temporaire supprimé avec succès !';
+                break; 
+            }
+        }
+    }
+}
 ?>

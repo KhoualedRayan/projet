@@ -16,4 +16,21 @@ $(document).ready(function () {
             }
         });
     });
+    $(document).on('click', '.supprimerDuPanierTemporaire', function () {
+        var dateCocktail = $(this).data('cocktail');
+        $.ajax({
+            type: 'POST',
+            url: '../traitement_php/traitement_supprimer_panier.php',
+            data: { dateCocktail: dateCocktail },
+            success: function (response) {
+                console.log(dateCocktail);
+                location.reload();
+                alert('Cocktail supprimé du panier temporaire avec succès !');
+                
+            },
+            error: function (error) {
+                console.error('Erreur lors de la suppresion du panier temporaire :', error);
+            }
+        });
+    });
 });
