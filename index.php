@@ -53,6 +53,12 @@ try {
                 <br>
                     <li><a href='php/connexion.php'>Connexion</a></li>
                 </br>
+                <?php
+                if (isset($_SESSION['utilisateur_connecte'])) {
+                    echo"<li><a href='php/profil.php'>Profil</a></li>";
+                    echo'<br/>';
+                }
+                ?>
                 <li><a href='php/recettes.php'>Toute les recettes</a></li>
                 <br>
                     <li><a href='php/panier.php'>Panier</a></li>

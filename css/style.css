@@ -80,12 +80,17 @@ footer {
     border: 1px solid black;
 }
 .cocktail-image {
-    width: 100px; /* Ajuste la taille selon tes besoins */
-    height: 100px; /* Ajuste la taille selon tes besoins */
+    width: 100px; 
+    height: 100px; 
 }
 .tab-image{
     background-color:lightblue;
 }
 .tab-image-ligne {
     background-color: cornflowerblue;
+}
+.grise {
+    background-color: #f0f0f0; 
+    color: red; 
+    border: 1px solid #ccc;
 }

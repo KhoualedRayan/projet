@@ -24,6 +24,7 @@ try {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../js/panier.js" defer></script>
     <title>Index</title>
 </head>
@@ -52,7 +53,13 @@ try {
                 <li><a href='inscription.php'>Inscription</a></li>
                 <br>
                     <li><a href='connexion.php'>Connexion</a></li>
-                </br>
+                    <br>
+                <?php
+                if (isset($_SESSION['utilisateur_connecte'])) {
+                    echo "<li><a href='profil.php'>Profil</a></li>";
+                    echo '<br/>';
+                }
+                ?>
                 <li><a href='recettes.php'>Toute les recettes</a></li>
                 <br>
                     <li><a href='panier.php'>Panier</a></li>
@@ -92,7 +99,8 @@ try {
 </body>
 </html>
 <?php
-function afficherTab($stmt){
+function afficherTab($stmt)
+{
     echo '<table border="1" class="tab-image">';
     echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Supprimer du panier</th></tr>';
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
