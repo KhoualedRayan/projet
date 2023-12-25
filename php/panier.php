@@ -24,12 +24,13 @@ try {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../js/panier.js" defer></script>
-    <title>Index</title>
+    <title>Panier</title>
 </head>
 <body>
     <header>
-        <h1>Boutique de nourriture MIAM</h1>
+        <h1>Panier</h1>
         <div id="compte">
             <?php
             if (isset($_SESSION['utilisateur_connecte'])) {
@@ -50,10 +51,16 @@ try {
                 <li><a href='../index.php'>Accueil</a></li>
                 <br />
                 <li><a href='inscription.php'>Inscription</a></li>
-                <br>
-                    <li><a href='connexion.php'>Connexion</a></li>
-                </br>
-                <li><a href='recettes.php'>Toute les recettes</a></li>
+                <br />
+                <li><a href='connexion.php'>Connexion</a></li>
+                <br />
+                <?php
+                if (isset($_SESSION['utilisateur_connecte'])) {
+                    echo "<li><a href='profil.php'>Profil</a></li>";
+                    echo '<br/>';
+                }
+                ?>
+                <li><a href='recettes.php'>Toutes les recettes</a></li>
                 <br>
                     <li><a href='panier.php'>Panier</a></li>
                 </br>
@@ -78,7 +85,12 @@ try {
                 echo 'Le panier est vide.';
             }
         } else {
-            echo 'L\'utilisateur n\'est pas connecté.';
+            if (isset($_SESSION['panier_temporaire']) && !empty($_SESSION['panier_temporaire'])) {
+                echo '<h3>Cocktails temporaires :</h3>';
+                afficherTabTemporaire($_SESSION['panier_temporaire']);
+            } else {
+                echo 'Panier temporaire vide.';
+            }
         }
 
 
@@ -87,12 +99,13 @@ try {
     </main>
 
     <footer>
-        <p> ©Ma boutique à moi</p>
+        <p> Un site développé par Thomas et Rayan.</p>
     </footer>
 </body>
 </html>
 <?php
-function afficherTab($stmt){
+function afficherTab($stmt)
+{
     echo '<table border="1" class="tab-image">';
     echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Supprimer du panier</th></tr>';
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -118,4 +131,34 @@ function afficherTab($stmt){
     }
     echo '</table>';
 }
+function afficherTabTemporaire($panierTemporaire)
+{
+    echo '<table border="1" class="tab-image">';
+    echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Date d\'ajout temporaire</th><th>Supprimer du panier</th></tr>';
+    foreach ($panierTemporaire as $cocktailTemporaire) {
+        echo '<tr>';
+        // Colonne de la photo
+        $nomCocktailTemporaire = $cocktailTemporaire['nomCocktail'];
+        $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
+        $nomCocktailTemporaire = strtr($nomCocktailTemporaire, $accents);
+        $imagePath = "../Photos/{$nomCocktailTemporaire}.jpg";
+        if (file_exists($imagePath)) {
+            echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $cocktailTemporaire['nomCocktail'] . '"></td>';
+        } else {
+            echo '<td class ="cocktail-image"></td>';
+        }
+        // Colonne du nom du cocktail temporaire
+        echo '<td>' . $cocktailTemporaire['nomCocktail'] . '</td>';
+        // Colonne de la date d'ajout temporaire
+        echo '<td>' . $cocktailTemporaire['dateAjout'] . '</td>';
+
+        echo '<td>';
+        echo '<button class="supprimerDuPanierTemporaire" data-cocktail="' . $cocktailTemporaire['dateAjout'] . '">Supprimer du panier temporaire</button>';
+
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+}
+
 ?>

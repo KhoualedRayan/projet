@@ -16,7 +16,7 @@ $utilisateur = "CREATE TABLE Utilisateur (
                 mail VARCHAR (60),
                 sexe VARCHAR (1),
                 adresse VARCHAR (60),
-                codePostal INTEGER (5),
+                codePostal VARCHAR (5),
                 ville VARCHAR (60),
                 numTelephone VARCHAR (14))";
 
@@ -35,7 +35,7 @@ $panier = "CREATE TABLE Panier(
   nomCocktailP VARCHAR (100),
   dateAjout DATE,
   FOREIGN KEY (nomCocktailP) REFERENCES Cocktail(nomCocktail),
-  FOREIGN KEY (loginP) REFERENCES Utilisateur(login)
+  FOREIGN KEY (loginP) REFERENCES Utilisateur(login) ON DELETE CASCADE
 )";
 
 
@@ -73,16 +73,6 @@ try {
     if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Aliment"')->rowCount() > 0)
         $dbco->exec("DROP TABLE Aliment;");
 
-    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Panier"')->rowCount() > 0)
-        $dbco->exec("DROP TABLE Panier;");
-    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Liaison"')->rowCount() > 0)
-        $dbco->exec("DROP TABLE Liaison;");
-    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Utilisateur"')->rowCount() > 0)
-        $dbco->exec("DROP TABLE Utilisateur;");
-    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Cocktail"')->rowCount() > 0)
-        $dbco->exec("DROP TABLE Cocktail;");
-    if ($dbco->query('SHOW TABLES FROM ' . $dbname . ' LIKE "Aliment"')->rowCount() > 0)
-        $dbco->exec("DROP TABLE Aliment;");
 
     $dbco->exec($utilisateur);
     $dbco->exec($cocktail);

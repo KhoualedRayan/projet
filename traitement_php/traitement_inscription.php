@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail = $_POST["mail"];
     $date_naiss = isset($_POST["date_naiss"]) ? $_POST["date_naiss"] : null;
     $adresse = $_POST["adresse"];
-    $code_postal = $_POST["code_postal"] ? $_POST["date_naiss"] : null;
+    $code_postal = $_POST["code_postal"];
     $ville = $_POST["ville"];
     $tel = $_POST["tel"];
 
@@ -80,7 +80,5 @@ function echecInscription(){
     header("Location: ../index.php");
     exit();
 }
-function verifLogin(){
-    
-}
+
 ?>

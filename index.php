@@ -25,11 +25,11 @@ try {
     <script src="js/index.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <title>Index</title>
+    <title>Acceuil</title>
 </head>
 <body>
     <header>
-        <h1>Boutique de nourriture MIAM</h1>
+        <h1>Acceuil</h1>
         <div id="compte">
             <?php
             if (isset($_SESSION['utilisateur_connecte'])) {
@@ -53,7 +53,13 @@ try {
                 <br>
                     <li><a href='php/connexion.php'>Connexion</a></li>
                 </br>
-                <li><a href='php/recettes.php'>Toute les recettes</a></li>
+                <?php
+                if (isset($_SESSION['utilisateur_connecte'])) {
+                    echo"<li><a href='php/profil.php'>Profil</a></li>";
+                    echo'<br/>';
+                }
+                ?>
+                <li><a href='php/recettes.php'>Toutes les recettes</a></li>
                 <br>
                     <li><a href='php/panier.php'>Panier</a></li>
                 </br>
