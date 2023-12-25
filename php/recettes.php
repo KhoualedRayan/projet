@@ -62,7 +62,6 @@ try {
     <main>
         <h2>Hiérarchie des aliments</h2>
         <div id="hierarchie-container">
-            <!-- Le contenu de hierarchie_aliments.php sera chargé ici -->
         </div>
     </main>
 
