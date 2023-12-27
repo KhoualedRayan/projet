@@ -37,17 +37,19 @@ try {
         }
         $_SESSION['fil'][] = 'Aliment';
         $_SESSION['fil'] = array_reverse($_SESSION['fil']);
+
+        // Afficher le fil d'Ariane avec des liens cliquables
+        echo "<p id='fil_ariane'>Fil d'Ariane : ";
+        foreach ($_SESSION['fil'] as $i => $motAriane) {
+            if ($i > 0) {
+                echo " -> ";
+            }
+            echo "<a href='#' class='mot-cliquable' data-index='$i'>$motAriane</a>";
+        }
+        echo "</p>";
     }
 
-    // Afficher le fil d'Ariane avec des liens cliquables
-    echo "<p id='fil_ariane'>Fil d'Ariane : ";
-    foreach ($_SESSION['fil'] as $i => $motAriane) {
-        if ($i > 0) {
-            echo " -> ";
-        }
-        echo "<a href='#' class='mot-cliquable' data-index='$i'>$motAriane</a>";
-    }
-    echo "</p>";
+    
 
     // Récupérer les sous-aliments actuels
     $motSousAliments = $mot;
@@ -59,48 +61,118 @@ try {
     if ($stmtSousAliments->rowCount() > 0) {
         echo "<ul id='zone_sous_aliments'>";
         while ($rowSousAliments = $stmtSousAliments->fetch(PDO::FETCH_ASSOC)) {
-            echo "<li class='mot-cliquable'>$rowSousAliments[nomAliment]</li>";
+            echo "<li class='mot-cliquable' ><span style='color: blue; cursor: pointer; text-decoration: underline;'>$rowSousAliments[nomAliment]</span></li>";
         }
         echo "</ul>";
     } else {
         echo "<p>Aucun sous-aliment trouvé pour $mot.</p>";
     }
+
+    
+    $ss_aliment = $mot; // Valeur par défaut si non définie
+
+    $sousAliments = getSousAliments($dbco, $ss_aliment);
+
+// Utiliser la liste des sous-aliments pour construire la requête SQL
+$query = "SELECT * FROM Cocktail WHERE nomCocktail IN (
+    SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+
+// Ajouter les sous-aliments à la liste
+$query .= implode(',', array_fill(0, count($sousAliments), '?'));
+$query .= "))";
+
+$stmt = $dbco->prepare($query);
+$stmt->execute($sousAliments);
+
+
+        // Vérifier s'il y a des résultats
+    if ($stmt->rowCount() > 0) {
+        // Afficher les résultats dans un tableau
+        echo '<table border="1" class="tab-image">';
+        echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            echo '<tr>';
+            // Colonne de la photo
+            $nomCocktail = $row['nomCocktail'];
+            $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
+            $nomCocktail = strtr($nomCocktail, $accents);
+            $imagePath = "../Photos/{$nomCocktail}.jpg";
+            if (file_exists($imagePath)) {
+                echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktail'] . '"></td>';
+            } else {
+                echo '<td class ="cocktail-image"></td>';
+            }
+            // Colonne du nom du cocktail
+            echo '<td>' . $row['nomCocktail'] . '</td>';
+            // Colonne de la préparation
+            echo '<td>' . $row['preparation'] . '</td>';
+            // Colonne des ingrédients
+            echo '<td>' . $row['ingredients'] . '</td>';
+            echo '<td>';
+            echo '<button class="addToCart" data-cocktail="' . htmlspecialchars($row['nomCocktail']) . '">Ajouter au Panier</button>';
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    } else {
+        echo 'Aucun cocktail trouvé.';
+    }
+
+
+
 } catch (PDOException $e) {
     echo "Erreur : " . $e->getMessage();
 }
+
+function getSousAliments($dbco, $aliment) {
+    $sousAliments = array($aliment);
+
+    $querySousAliments = "SELECT nomAliment FROM Aliment WHERE pereAliment = :aliment";
+    $stmtSousAliments = $dbco->prepare($querySousAliments);
+    $stmtSousAliments->bindParam(':aliment', $aliment, PDO::PARAM_STR);
+    $stmtSousAliments->execute();
+
+    while ($rowSousAliments = $stmtSousAliments->fetch(PDO::FETCH_ASSOC)) {
+        $sousAliments = array_merge($sousAliments, getSousAliments($dbco, $rowSousAliments['nomAliment']));
+    }
+
+    return $sousAliments;
+}
+
 ?>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var filAriane = document.getElementById('fil_ariane');
-        filAriane.addEventListener('click', function (event) {
-            event.preventDefault();
-            var target = event.target;
-            if (target.classList.contains('mot-cliquable')) {
-                var index = target.getAttribute('data-index');
-                chargerSousAliments(index);
-            }
-        });
-
-        function chargerSousAliments(index) {
-            // Mettre à jour le fil d'Ariane sur la page
-            fetch('votre_script_php_pour_les_sous_aliments.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'mot=' + encodeURIComponent(document.querySelector('.mot-cliquable[data-index="' + index + '"]').innerHTML),
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('zone_sous_aliments').innerHTML = data;
-
-                // Si le mot cliqué est "Aliment", le fil d'Ariane est vidé
-                if (document.querySelector('.mot-cliquable[data-index="' + index + '"]').innerHTML === 'Aliment') {
-                    document.getElementById('fil_ariane').innerHTML = "";
-                }
-            })
-            .catch(error => console.error('Erreur lors de la récupération des sous-aliments:', error));
+    var filAriane = document.getElementById('fil_ariane');
+    filAriane.addEventListener('click', function (event) {
+        event.preventDefault();
+        var target = event.target;
+        if (target.classList.contains('mot-cliquable')) {
+            var index = target.getAttribute('data-index');
+            chargerSousAliments(index);
         }
     });
+
+    function chargerSousAliments(index) {
+        // Mettre à jour le fil d'Ariane sur la page
+        fetch('hierarchie_aliments.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'mot=' + encodeURIComponent(document.querySelector('.mot-cliquable[data-index="' + index + '"]').innerHTML),
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('zone_sous_aliments').innerHTML = data;
+
+            // Si le mot cliqué est "Aliment", le fil d'Ariane est vidé
+            if (document.querySelector('.mot-cliquable[data-index="' + index + '"]').innerHTML === 'Aliment') {
+                document.getElementById('fil_ariane').innerHTML = "";
+            }
+        })
+        .catch(error => console.error('Erreur lors de la récupération des sous-aliments:', error));
+    }
+});
+
 </script>

@@ -94,3 +94,12 @@ footer {
     color: red; 
     border: 1px solid #ccc;
 }
+
+.hoverable {
+        color: blue;
+        text-decoration: underline;
+    }
+
+.hoverable:hover {
+    cursor: pointer;
+}
