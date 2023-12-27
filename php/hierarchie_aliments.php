@@ -49,9 +49,7 @@ try {
         echo "</p>";
     }
 
-
-
-    // Récupérer les sous-aliments actuels
+            // Récupérer les sous-aliments actuels
     $motSousAliments = $mot;
     $querySousAliments = "SELECT nomAliment FROM Aliment WHERE pereAliment = :motSousAliments";
     $stmtSousAliments = $dbco->prepare($querySousAliments);
@@ -67,6 +65,10 @@ try {
     } else {
         echo "<p>Aucun sous-aliment trouvé pour $mot.</p>";
     }
+
+
+    if($mot != 'Aliment'){
+
 
 
     $ss_aliment = $mot; // Valeur par défaut si non définie
@@ -117,6 +119,46 @@ try {
     } else {
         echo 'Aucun cocktail trouvé.';
     }
+    }else{
+        // Sélectionner tous les cocktails de la table
+        $query = "SELECT * FROM Cocktail";
+        $stmt = $dbco->query($query);
+
+        // Vérifier s'il y a des résultats
+        if ($stmt->rowCount() > 0) {
+            // Afficher les résultats dans un tableau
+            echo '<table border="1" class="tab-image">';
+            echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo '<tr>';
+                // Colonne de la photo
+                $nomCocktail = $row['nomCocktail'];
+                $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
+                $nomCocktail = strtr($nomCocktail, $accents);
+                $imagePath = "../Photos/{$nomCocktail}.jpg";
+                if (file_exists($imagePath)) {
+                    echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktail'] . '"></td>';
+                } else {
+                    echo '<td class ="cocktail-image"></td>';
+                }
+                // Colonne du nom du cocktail
+                echo '<td>' . $row['nomCocktail'] . '</td>';
+                // Colonne de la préparation
+                echo '<td>' . $row['preparation'] . '</td>';
+                // Colonne des ingrédients
+                echo '<td>' . $row['ingredients'] . '</td>';
+                echo '<td>';
+                echo '<button class="addToCart" data-cocktail="' . htmlspecialchars($row['nomCocktail']) . '">Ajouter au Panier</button>';
+
+                echo '</td>';
+                echo '</tr>';
+            }
+            echo '</table>';
+        } else {
+            echo 'Aucun cocktail trouvé.';
+        }
+    }
+    
 
 
 
