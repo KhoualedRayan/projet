@@ -32,7 +32,7 @@ try {
             if ($rowPereAliment = $stmtPereAliment->fetch(PDO::FETCH_ASSOC)) {
                 $currentMot = $rowPereAliment['pereAliment'];
             } else {
-                break;  // Sortir de la boucle si le père n'est pas trouvé
+                break; // Sortir de la boucle si le père n'est pas trouvé
             }
         }
         $_SESSION['fil'][] = 'Aliment';
@@ -49,7 +49,7 @@ try {
         echo "</p>";
     }
 
-    
+
 
     // Récupérer les sous-aliments actuels
     $motSousAliments = $mot;
@@ -68,24 +68,24 @@ try {
         echo "<p>Aucun sous-aliment trouvé pour $mot.</p>";
     }
 
-    
+
     $ss_aliment = $mot; // Valeur par défaut si non définie
 
     $sousAliments = getSousAliments($dbco, $ss_aliment);
 
-// Utiliser la liste des sous-aliments pour construire la requête SQL
-$query = "SELECT * FROM Cocktail WHERE nomCocktail IN (
+    // Utiliser la liste des sous-aliments pour construire la requête SQL
+    $query = "SELECT * FROM Cocktail WHERE nomCocktail IN (
     SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
 
-// Ajouter les sous-aliments à la liste
-$query .= implode(',', array_fill(0, count($sousAliments), '?'));
-$query .= "))";
+    // Ajouter les sous-aliments à la liste
+    $query .= implode(',', array_fill(0, count($sousAliments), '?'));
+    $query .= "))";
 
-$stmt = $dbco->prepare($query);
-$stmt->execute($sousAliments);
+    $stmt = $dbco->prepare($query);
+    $stmt->execute($sousAliments);
 
 
-        // Vérifier s'il y a des résultats
+    // Vérifier s'il y a des résultats
     if ($stmt->rowCount() > 0) {
         // Afficher les résultats dans un tableau
         echo '<table border="1" class="tab-image">';
@@ -124,7 +124,8 @@ $stmt->execute($sousAliments);
     echo "Erreur : " . $e->getMessage();
 }
 
-function getSousAliments($dbco, $aliment) {
+function getSousAliments($dbco, $aliment)
+{
     $sousAliments = array($aliment);
 
     $querySousAliments = "SELECT nomAliment FROM Aliment WHERE pereAliment = :aliment";
@@ -140,39 +141,3 @@ function getSousAliments($dbco, $aliment) {
 }
 
 ?>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    var filAriane = document.getElementById('fil_ariane');
-    filAriane.addEventListener('click', function (event) {
-        event.preventDefault();
-        var target = event.target;
-        if (target.classList.contains('mot-cliquable')) {
-            var index = target.getAttribute('data-index');
-            chargerSousAliments(index);
-        }
-    });
-
-    function chargerSousAliments(index) {
-        // Mettre à jour le fil d'Ariane sur la page
-        fetch('hierarchie_aliments.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'mot=' + encodeURIComponent(document.querySelector('.mot-cliquable[data-index="' + index + '"]').innerHTML),
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('zone_sous_aliments').innerHTML = data;
-
-            // Si le mot cliqué est "Aliment", le fil d'Ariane est vidé
-            if (document.querySelector('.mot-cliquable[data-index="' + index + '"]').innerHTML === 'Aliment') {
-                document.getElementById('fil_ariane').innerHTML = "";
-            }
-        })
-        .catch(error => console.error('Erreur lors de la récupération des sous-aliments:', error));
-    }
-});
-
-</script>

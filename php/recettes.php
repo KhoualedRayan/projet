@@ -24,6 +24,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/style.css" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="../js/recettes.js" defer></script>
     <title>Recettes</title>
 </head>
 <body>
@@ -38,7 +39,7 @@ try {
                 // Afficher le nom de l'utilisateur dans le HEADER
                 echo 'Bienvenue, ' . $nomUtilisateur . '!';
             }
-            
+
             ?>
         </div>
     </header>
@@ -69,36 +70,9 @@ try {
 
     <main>
         <h2>Hiérarchie des aliments</h2>
-        <div id="hierarchie-container">
-        </div>
+        <div id="hierarchie-container"></div>
     </main>
 
-    <script>
-        $(document).ready(function () {
-            // Fonction pour charger les sous-aliments au chargement de la page
-            function chargerSousAliments(mot) {
-                $.ajax({
-                    type: "POST",
-                    url: "hierarchie_aliments.php",
-                    data: { mot: mot },
-                    success: function (response) {
-                        $("#hierarchie-container").html(response);
-                    },
-                    error: function () {
-                        alert("Une erreur s'est produite lors du chargement de la hiérarchie.");
-                    }
-                });
-            }
-            // Charger les sous-aliments initiaux pour la catégorie "Aliment"
-            chargerSousAliments("Aliment");
-
-            // Fonction de gestion du clic sur un élément
-            $(document).on("click", ".mot-cliquable", function () {
-                var motClique = $(this).text();
-                chargerSousAliments(motClique);
-            });
-        });
-    </script>
 
     <footer>
         <p> Un site développé par Thomas et Rayan.</p>
