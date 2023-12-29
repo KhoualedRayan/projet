@@ -115,4 +115,18 @@ footer {
 
 #resultsDropdown {
     display: none;
+    width: 30%;
 }
+
+#tab-aliments {
+    display: none;
+    margin-right : 20%;
+    width: 45%;
+}
+.recherche {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+

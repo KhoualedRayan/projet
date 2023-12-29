@@ -47,14 +47,14 @@ $stmt->execute($params);
 if ($stmt->rowCount() > 0) {
     // Afficher les résultats dans un tableau
     echo '<table border="1" class="tab-image">';
-    echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
+    echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Pr&eacute;paration</th><th>Ingr&eacute;dients</th><th>Panier</th></tr>';
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         echo '<tr>';
         // Colonne de la photo
         $nomCocktail = $row['nomCocktail'];
         $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
         $nomCocktail = strtr($nomCocktail, $accents);
-        $imagePath = "../Photos/{$nomCocktail}.jpg";
+        $imagePath = "../../projet/Photos/{$nomCocktail}.jpg";
         if (file_exists($imagePath)) {
             echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktail'] . '"></td>';
         } else {

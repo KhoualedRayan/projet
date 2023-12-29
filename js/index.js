@@ -15,20 +15,28 @@ $(document).ready(function () {
         });
     });
     $('#resultsDropdown').hide();
-        $('#searchTerm').on('input', performSearch);
+    $('#searchTerm').on('input', performSearch);
 
-        // Ajouter un gestionnaire d'événements au clic pour les options de la liste déroulante
-        $('#resultsDropdown').on('click', 'option', function () {
-            // Récupérer la valeur de l'option cliquée
-            var selectedAliment = $(this).val();
-            ajouterUnMot(selectedAliment,alimentsInclusArray);
-        });
+    $('#resultsDropdown').on('click', 'option', function () {
+        // Récupérer la valeur de l'option cliquée
+        var selectedAliment = $(this).val();
+        alimentsInclusArray.push(selectedAliment);
+        var newRowHtml = '<tr>' +
+            '<td>' + selectedAliment + '</td>' +
+            '<td class="tab-image-filtre"><img src="images/supprimer.png" alt="Supprimer" onclick="supprimerLigne(this)"></td>' +
+            '<td class="tab-image-filtre"><img src="images/changer-colonne.png" alt="ChangerColonne" onclick="echangerColonne(this)"></td>' +
+            '<td></td>' +
+            '</tr>';
+
+        $('#tab-aliments').append(newRowHtml); 
+        updateTableauxInfo();
+    });
 
 });
 function updateCocktails() {
     $.ajax({
         type: 'POST',
-        url: 'traitement_php/traitement_recherche_cocktail.php', 
+        url: 'traitement_php/traitement_recherche_cocktail.php',
         data: {
             alimentsInclus: alimentsInclusArray,
             alimentsExclus: alimentsExclusArray
@@ -46,16 +54,12 @@ function updateTableauxInfo() {
     console.log('Aliments inclus :', alimentsInclusArray);
     console.log('Aliments exclus :', alimentsExclusArray);
 
-    var tableauxInfo = document.getElementById('tableaux-info');
     var tabAliments = document.getElementById('tab-aliments');
 
     if (alimentsInclusArray.length == 0 && alimentsExclusArray.length == 0) {
-        tableauxInfo.innerHTML = "";
         tabAliments.style.display = 'none';
     } else {
         tabAliments.style.display = 'table';
-        tableauxInfo.innerHTML = "Aliments inclus : <br/>" + alimentsInclusArray.join('.') +
-            "<br/>Aliments exclus : <br/>" + alimentsExclusArray.join('.');
     }
 
     updateCocktails();
@@ -123,53 +127,28 @@ function echangerColonne(button) {
     updateTableauxInfo();
 }
 
-function ajouterUnMot(aliment, aliments_inclus) {
-    // Effectuer une requête AJAX pour appeler la fonction PHP qui ajoute le mot
+
+
+
+function performSearch() {
+    var searchTerm = $('#searchTerm').val();
+
+    if (searchTerm.trim() === '') {
+        $('#resultsDropdown').hide();
+        return;
+    }
+
     $.ajax({
         type: 'POST',
-        url: 'index.php',
-        data: { mot: aliment, alimentsInclusArray: aliments_inclus },
-        success: function(response) {
-            // La fonction PHP a été appelée avec succès, la réponse est dans 'response'
-            console.log("--------"+response+"------------");
-
+        url: 'traitement_php/traitement_recherche.php',
+        data: { searchTerm: searchTerm },
+        success: function (data) {
+            $('#resultsDropdown').html(data);
+            $('#resultsDropdown').show();
         },
-        error: function(error) {
-            // Une erreur s'est produite lors de l'appel de la fonction PHP
-            console.error("Erreur lors de l'appel de la fonction PHP :", error);
+        error: function () {
+            console.log('Erreur lors de la requête.');
         }
     });
 }
-
-
-
-
-
-
-
-    function initializePage() {
-        
-    }
-
-    function performSearch() {
-        var searchTerm = $('#searchTerm').val();
-
-        if (searchTerm.trim() === '') {
-            $('#resultsDropdown').hide();
-            return;
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: 'traitement_php/traitement_recherche.php',
-            data: { searchTerm: searchTerm },
-            success: function (data) {
-                $('#resultsDropdown').html(data);
-                $('#resultsDropdown').show();
-            },
-            error: function () {
-                console.log('Erreur lors de la requête.');
-            }
-        });
-    }
 
