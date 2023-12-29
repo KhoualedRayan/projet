@@ -18,35 +18,34 @@ try {
 $alimentsInclusArray = isset($_POST["alimentsInclus"]) ? $_POST["alimentsInclus"] : array();
 $alimentsExclusArray = isset($_POST["alimentsExclus"]) ? $_POST["alimentsExclus"] : array();
 
-$alimentsInclusString = implode(',', $alimentsInclusArray);
-$alimentsExclusString = implode(',', $alimentsExclusArray);
+$sousAlimentsInclusListe = getSousAlimentsListe($dbco, $alimentsInclusArray);
+$sousAlimentsExclusListe = getSousAlimentsListe($dbco, $alimentsExclusArray);
 
-echo "<br/>alimentsInclusString: ";
-echo "<br/>";
-echo $alimentsInclusString;
-echo "<br/>";
-echo "alimentsExclusString: <br/>";
-echo $alimentsExclusString;
-echo "<br/>";
 
-/*$query = "SELECT * FROM Cocktail WHERE FIND_IN_SET(ingredients, :alimentsInclus) AND NOT FIND_IN_SET(ingredients, :alimentsExclus)";
-$stmt = $dbco->prepare($query);
-$stmt->bindParam(':alimentsInclus', $alimentsInclusString);
-$stmt->bindParam(':alimentsExclus', $alimentsExclusString);
-$stmt->execute();
-*/
-$query = "SELECT * FROM Cocktail WHERE nomCocktail IN (
-    SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+$query = "SELECT * FROM Cocktail WHERE 1";
 
-// Ajouter les sous-aliments à la liste
-$query .= implode(',', array_fill(0, count($alimentsInclusArray), '?'));
-$query .= "))";
+if (!empty($sousAlimentsInclusListe)) {
+    $query .= " AND nomCocktail IN (
+        SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+    $query .= implode(',', array_fill(0, count($sousAlimentsInclusListe), '?'));
+    $query .= "))";
+}
+
+if (!empty($sousAlimentsExclusListe)) {
+    $query .= " AND nomCocktail NOT IN (
+        SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+    $query .= implode(',', array_fill(0, count($sousAlimentsExclusListe), '?'));
+    $query .= "))";
+}
 
 $stmt = $dbco->prepare($query);
-$stmt->execute($alimentsInclusArray);
 
-// Vérifier s'il y a des résultats
+$params = array_merge($sousAlimentsInclusListe, $sousAlimentsExclusListe);
+$stmt->execute($params);
+
+
 if ($stmt->rowCount() > 0) {
+    // Afficher les résultats dans un tableau
     echo '<table border="1" class="tab-image">';
     echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -55,7 +54,7 @@ if ($stmt->rowCount() > 0) {
         $nomCocktail = $row['nomCocktail'];
         $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
         $nomCocktail = strtr($nomCocktail, $accents);
-        $imagePath = "Photos/{$nomCocktail}.jpg";
+        $imagePath = "../Photos/{$nomCocktail}.jpg";
         if (file_exists($imagePath)) {
             echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktail'] . '"></td>';
         } else {
@@ -69,7 +68,6 @@ if ($stmt->rowCount() > 0) {
         echo '<td>' . $row['ingredients'] . '</td>';
         echo '<td>';
         echo '<button class="addToCart" data-cocktail="' . htmlspecialchars($row['nomCocktail']) . '">Ajouter au Panier</button>';
-
         echo '</td>';
         echo '</tr>';
     }
@@ -77,4 +75,28 @@ if ($stmt->rowCount() > 0) {
 } else {
     echo 'Aucun cocktail trouvé.';
 }
+function getSousAliments($dbco, $aliment)
+{
+    $sousAliments = array($aliment);
+
+    $querySousAliments = "SELECT nomAliment FROM Aliment WHERE pereAliment = :aliment";
+    $stmtSousAliments = $dbco->prepare($querySousAliments);
+    $stmtSousAliments->bindParam(':aliment', $aliment, PDO::PARAM_STR);
+    $stmtSousAliments->execute();
+
+    while ($rowSousAliments = $stmtSousAliments->fetch(PDO::FETCH_ASSOC)) {
+        $sousAliments = array_merge($sousAliments, getSousAliments($dbco, $rowSousAliments['nomAliment']));
+    }
+
+    return $sousAliments;
+}
+function getSousAlimentsListe($dbco, $aliment)
+{
+    $sousAliments = array();
+    foreach ($aliment as $a) {
+        $sousAliments = array_merge($sousAliments, getSousAliments($dbco, $a));
+    }
+    return $sousAliments;
+}
+
 ?>

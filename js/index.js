@@ -19,13 +19,12 @@ $(document).ready(function () {
 function updateCocktails() {
     $.ajax({
         type: 'POST',
-        url: 'traitement_php/traitement_recherche_cocktail.php', // Mettez le chemin correct ici
+        url: 'traitement_php/traitement_recherche_cocktail.php', 
         data: {
             alimentsInclus: alimentsInclusArray,
             alimentsExclus: alimentsExclusArray
         },
         success: function (response) {
-            // Mettez à jour le contenu du tableau des cocktails
             $('#cocktails-container').html(response);
         },
         error: function (error) {
@@ -37,9 +36,19 @@ function updateCocktails() {
 function updateTableauxInfo() {
     console.log('Aliments inclus :', alimentsInclusArray);
     console.log('Aliments exclus :', alimentsExclusArray);
+
     var tableauxInfo = document.getElementById('tableaux-info');
-    tableauxInfo.innerHTML = "Aliments inclus : <br/>" + alimentsInclusArray.join('.') +
-        "<br/>Aliments exclus : <br/>" + alimentsExclusArray.join('.');
+    var tabAliments = document.getElementById('tab-aliments');
+
+    if (alimentsInclusArray.length == 0 && alimentsExclusArray.length == 0) {
+        tableauxInfo.innerHTML = "";
+        tabAliments.style.display = 'none';
+    } else {
+        tabAliments.style.display = 'table';
+        tableauxInfo.innerHTML = "Aliments inclus : <br/>" + alimentsInclusArray.join('.') +
+            "<br/>Aliments exclus : <br/>" + alimentsExclusArray.join('.');
+    }
+
     updateCocktails();
 }
 
@@ -75,7 +84,6 @@ function echangerColonne(button) {
 
     // Récupérer le texte de la première colonne (aliment)
     var aliment = row.cells[0].innerText;
-    // Si la colonne d'origine est dans alimentsInclusArray, la déplacer vers alimentsExclusArray et vice versa
     if (aliment != "") {
         // Retirer de alimentsInclusArray
         var index = alimentsInclusArray.indexOf(aliment);

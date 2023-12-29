@@ -83,7 +83,7 @@ try {
         $alimentsInclusArray = array();
         $alimentsExclusArray = array();
         ?>
-        <table border="1" class="tab-image">
+        <table border="1" id="tab-aliments" class="tab-image">
             <tr class="tab-image-ligne"><th>Aliments inclus</th><th></th><th></th><th>Aliments exclus</th></tr>
             <?php
             ajouterMot("Fruit", $alimentsInclusArray);
