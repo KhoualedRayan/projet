@@ -22,9 +22,8 @@ try {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
-    <script src="js/index.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+    <script src="js/index.js" defer></script>
     <title>Acceuil</title>
 </head>
 <body>
@@ -55,8 +54,8 @@ try {
                 </br>
                 <?php
                 if (isset($_SESSION['utilisateur_connecte'])) {
-                    echo"<li><a href='php/profil.php'>Profil</a></li>";
-                    echo'<br/>';
+                    echo "<li><a href='php/profil.php'>Profil</a></li>";
+                    echo '<br/>';
                 }
                 ?>
                 <li><a href='php/recettes.php'>Toutes les recettes</a></li>
@@ -68,52 +67,55 @@ try {
     </nav>
 
     <main>
-        <h2>Tous les Cocktails</h2>
-
         <?php
-        // Sélectionner tous les cocktails de la table
-        $query = "SELECT * FROM Cocktail";
-        $stmt = $dbco->query($query);
-
-        // Vérifier s'il y a des résultats
-        if ($stmt->rowCount() > 0) {
-            // Afficher les résultats dans un tableau
-            echo '<table border="1" class="tab-image">';
-            echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                echo '<tr>';
-                // Colonne de la photo
-                $nomCocktail = $row['nomCocktail'];
-                $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
-                $nomCocktail = strtr($nomCocktail, $accents);
-                $imagePath = "Photos/{$nomCocktail}.jpg";
-                if (file_exists($imagePath)) {
-                    echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktail'] . '"></td>';
-                } else {
-                    echo '<td class ="cocktail-image"></td>';
-                }
-                // Colonne du nom du cocktail
-                echo '<td>' . $row['nomCocktail'] . '</td>';
-                // Colonne de la préparation
-                echo '<td>' . $row['preparation'] . '</td>';
-                // Colonne des ingrédients
-                echo '<td>' . $row['ingredients'] . '</td>';
-                echo '<td>';
-                echo '<button class="addToCart" data-cocktail="' . htmlspecialchars($row['nomCocktail']) . '">Ajouter au Panier</button>';
-
-                echo '</td>';
-                echo '</tr>';
-            }
-            echo '</table>';
-        } else {
-            echo 'Aucun cocktail trouvé.';
-        }
+        $alimentsInclusArray = array();
+        $alimentsExclusArray = array();
         ?>
+        <h2>Tous les Cocktails</h2>
+        <table border="1" class="tab-image">
+            <tr class="tab-image-ligne"><th>Aliments inclus</th><th></th><th></th><th>Aliments exclus</th></tr>
+            <?php 
+            ajouterMot("Fruit",$alimentsInclusArray);
+            ajouterMot("Melon",$alimentsInclusArray);
+            ajouterMot("Pastèque",$alimentsInclusArray);
+            ?>
+
+
+        </table>
+        <script>
+        var alimentsInclusArray = <?php echo json_encode($alimentsInclusArray); ?>;
+        var alimentsExclusArray = <?php echo json_encode($alimentsExclusArray); ?>;
+        </script>
+        <div id="tableaux-info">
+            <!-- Le contenu des tableaux sera affiché ici -->
+        </div>
+        <div id="cocktails-container">
+            <!-- Le contenu des cocktails sera affiché ici -->
+        </div>
+
     </main>
 
 
     <footer>
-        <p> ©Ma boutique à moi</p>
+        <p> Un site développé par Thomas et Rayan.</p>
     </footer>
 </body>
 </html>
+<?php
+function ajouterMot($mot, &$alimentsInclusArray)
+{
+    // Rajouter $mot au tableau approprié
+    $alimentsInclusArray[] = $mot;
+
+    // Afficher la ligne du tableau
+    echo '<tr>';
+    echo '<td>' . $mot . '</td>';
+    echo '<td class="tab-image-filtre"><img src="images/supprimer.png" alt="Supprimer" onclick="supprimerLigne(this)"></td>';
+    echo '<td class="tab-image-filtre"><img src="images/changer-colonne.png" alt="ChangerColonne" onclick="echangerColonne(this)"></td>';
+    echo '<td></td>';
+    echo '</tr>';
+}
+
+?>
+
+

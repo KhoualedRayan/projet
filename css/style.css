@@ -13,9 +13,9 @@ body {
 
 #compte {
     color: red;
-    background-color: lightblue; 
-    padding: 10px; 
-    text-align: right; 
+    background-color: lightblue;
+    padding: 10px;
+    text-align: right;
 }
 
 
@@ -79,27 +79,36 @@ footer {
     margin-top: -2px;
     border: 1px solid black;
 }
+
 .cocktail-image {
-    width: 100px; 
-    height: 100px; 
+    width: 100px;
+    height: 100px;
 }
-.tab-image{
-    background-color:lightblue;
+
+.tab-image {
+    background-color: lightblue;
 }
+
 .tab-image-ligne {
     background-color: cornflowerblue;
 }
+
 .grise {
-    background-color: #f0f0f0; 
-    color: red; 
+    background-color: #f0f0f0;
+    color: red;
     border: 1px solid #ccc;
 }
 
 .hoverable {
-        color: blue;
-        text-decoration: underline;
+    color: blue;
+    text-decoration: underline;
+}
+
+    .hoverable:hover {
+        cursor: pointer;
     }
 
-.hoverable:hover {
-    cursor: pointer;
+.tab-image-filtre img {
+    width: 25px;
+    height: 30px;
 }
