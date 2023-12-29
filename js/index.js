@@ -36,9 +36,19 @@ function updateCocktails() {
 function updateTableauxInfo() {
     console.log('Aliments inclus :', alimentsInclusArray);
     console.log('Aliments exclus :', alimentsExclusArray);
+
     var tableauxInfo = document.getElementById('tableaux-info');
-    tableauxInfo.innerHTML = "Aliments inclus : <br/>" + alimentsInclusArray.join('.') +
-        "<br/>Aliments exclus : <br/>" + alimentsExclusArray.join('.');
+    var tabAliments = document.getElementById('tab-aliments');
+
+    if (alimentsInclusArray.length == 0 && alimentsExclusArray.length == 0) {
+        tableauxInfo.innerHTML = "";
+        tabAliments.style.display = 'none';
+    } else {
+        tabAliments.style.display = 'table';
+        tableauxInfo.innerHTML = "Aliments inclus : <br/>" + alimentsInclusArray.join('.') +
+            "<br/>Aliments exclus : <br/>" + alimentsExclusArray.join('.');
+    }
+
     updateCocktails();
 }
 
