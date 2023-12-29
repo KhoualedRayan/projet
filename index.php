@@ -107,46 +107,81 @@ try {
     </main>
 
     <script>
-        // Fonction pour initialiser la page
-        function initializePage() {
-            // Masquer la liste déroulante au chargement de la page
+
+    function afficherTableauCoteClient(response) {
+    // Effacer le tableau et le reconstruire avec les données mises à jour
+    $('#tableaux-info').empty();
+
+    // Utiliser la réponse JSON pour construire le tableau avec les nouvelles données
+    for (var i = 0; i < response.length; i++) {
+        $('#tableaux-info').append('<tr><td>' + response[i] + '</td></tr>');
+    }
+}
+
+function ajouterUnMot(aliment, aliments_inclus) {
+    // Effectuer une requête AJAX pour appeler la fonction PHP qui ajoute le mot
+    $.ajax({
+        type: 'POST',
+        url: 'traitement_php/ajouterMot.php',
+        data: { mot: aliment, alimentsInclusArray: aliments_inclus },
+        success: function(response) {
+            // La fonction PHP a été appelée avec succès, la réponse est dans 'response'
+            console.log(response);
+
+            // Mettre à jour la liste côté client
+            afficherTableauCoteClient(response);
+        },
+        error: function(error) {
+            // Une erreur s'est produite lors de l'appel de la fonction PHP
+            console.error("Erreur lors de l'appel de la fonction PHP :", error);
+        }
+    });
+}
+
+
+
+
+
+
+
+    function initializePage() {
+        $('#resultsDropdown').hide();
+        $('#searchTerm').on('input', performSearch);
+
+        // Ajouter un gestionnaire d'événements au clic pour les options de la liste déroulante
+        $('#resultsDropdown').on('click', 'option', function () {
+            // Récupérer la valeur de l'option cliquée
+            var selectedAliment = $(this).val();
+            ajouterUnMot(selectedAliment, alimentsInclusArray);
+
+        });
+    }
+
+    function performSearch() {
+        var searchTerm = $('#searchTerm').val();
+
+        if (searchTerm.trim() === '') {
             $('#resultsDropdown').hide();
-
-            // Écouter les changements dans la barre de recherche
-            $('#searchTerm').on('input', performSearch);
+            return;
         }
 
-        // Fonction pour effectuer la recherche
-        function performSearch() {
-            var searchTerm = $('#searchTerm').val();
-
-            // Vérifier si la barre de recherche est vide
-            if (searchTerm.trim() === '') {
-                // Masquer la liste déroulante si la barre de recherche est vide
-                $('#resultsDropdown').hide();
-                return;  // Sortir de la fonction sans effectuer la requête
+        $.ajax({
+            type: 'POST',
+            url: 'traitement_php/traitement_recherche.php',
+            data: { searchTerm: searchTerm },
+            success: function (data) {
+                $('#resultsDropdown').html(data);
+                $('#resultsDropdown').show();
+            },
+            error: function () {
+                console.log('Erreur lors de la requête.');
             }
+        });
+    }
 
-            // Effectuer une requête asynchrone vers traitement.php
-            $.ajax({
-                type: 'POST',
-                url: 'traitement_php/traitement_recherche.php',
-                data: { searchTerm: searchTerm },
-                success: function (data) {
-                    // Mettre à jour la liste déroulante avec les résultats
-                    $('#resultsDropdown').html(data);
-                    // Afficher la liste déroulante
-                    $('#resultsDropdown').show();
-                },
-                error: function () {
-                    console.log('Erreur lors de la requête.');
-                }
-            });
-        }
+    $(document).ready(initializePage);
+</script>
 
-        // Appeler la fonction d'initialisation au chargement de la page
-        $(document).ready(initializePage);
-    </script>
 
 
 
