@@ -72,6 +72,11 @@ try {
         $alimentsExclusArray = array();
         ?>
         <h2>Tous les Cocktails</h2>
+
+        <form>
+            <label for="searchTerm">Recherche d'aliments :</label>
+            <input type="text" id="searchTerm" name="searchTerm" oninput="performSearch()">
+        </form>
         <table border="1" class="tab-image">
             <tr class="tab-image-ligne"><th>Aliments inclus</th><th></th><th></th><th>Aliments exclus</th></tr>
             <?php 
@@ -80,6 +85,33 @@ try {
             ajouterMot("Pastèque",$alimentsInclusArray);
             ?>
 
+        <select id="resultsDropdown" size="20">
+            <!-- Options de la liste déroulante -->
+        </select>
+
+
+    </main>
+
+<script>
+    // Fonction pour initialiser la page
+    function initializePage() {
+        // Masquer la liste déroulante au chargement de la page
+        $('#resultsDropdown').hide();
+
+        // Écouter les changements dans la barre de recherche
+        $('#searchTerm').on('input', performSearch);
+    }
+
+    // Fonction pour effectuer la recherche
+    function performSearch() {
+        var searchTerm = $('#searchTerm').val();
+
+        // Vérifier si la barre de recherche est vide
+        if (searchTerm.trim() === '') {
+            // Masquer la liste déroulante si la barre de recherche est vide
+            $('#resultsDropdown').hide();
+            return;  // Sortir de la fonction sans effectuer la requête
+        }
 
         </table>
         <script>
@@ -92,6 +124,28 @@ try {
         <div id="cocktails-container">
             <!-- Le contenu des cocktails sera affiché ici -->
         </div>
+
+        // Effectuer une requête asynchrone vers traitement.php
+        $.ajax({
+            type: 'POST',
+            url: 'traitement_php/traitement_recherche.php',
+            data: { searchTerm: searchTerm },
+            success: function (data) {
+                // Mettre à jour la liste déroulante avec les résultats
+                $('#resultsDropdown').html(data);
+                // Afficher la liste déroulante
+                $('#resultsDropdown').show();
+            },
+            error: function () {
+                console.log('Erreur lors de la requête.');
+            }
+        });
+    }
+
+    // Appeler la fonction d'initialisation au chargement de la page
+    $(document).ready(initializePage);
+</script>
+
 
     </main>
 
