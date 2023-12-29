@@ -67,56 +67,35 @@ try {
     </nav>
 
     <main>
-        <?php
-        $alimentsInclusArray = array();
-        $alimentsExclusArray = array();
-        ?>
         <h2>Tous les Cocktails</h2>
 
         <form>
             <label for="searchTerm">Recherche d'aliments :</label>
-            <input type="text" id="searchTerm" name="searchTerm" oninput="performSearch()">
+            <input type="text" id="searchTerm" name="searchTerm" oninput="performSearch()" />
         </form>
-        <table border="1" class="tab-image">
-            <tr class="tab-image-ligne"><th>Aliments inclus</th><th></th><th></th><th>Aliments exclus</th></tr>
-            <?php 
-            ajouterMot("Fruit",$alimentsInclusArray);
-            ajouterMot("Melon",$alimentsInclusArray);
-            ajouterMot("Pastèque",$alimentsInclusArray);
-            ?>
 
         <select id="resultsDropdown" size="20">
             <!-- Options de la liste déroulante -->
         </select>
 
 
-    </main>
+        <?php
+        $alimentsInclusArray = array();
+        $alimentsExclusArray = array();
+        ?>
+        <table border="1" class="tab-image">
+            <tr class="tab-image-ligne"><th>Aliments inclus</th><th></th><th></th><th>Aliments exclus</th></tr>
+            <?php
+            ajouterMot("Fruit", $alimentsInclusArray);
+            ajouterMot("Melon", $alimentsInclusArray);
+            ajouterMot("Pastèque", $alimentsInclusArray);
+            ?>
 
-<script>
-    // Fonction pour initialiser la page
-    function initializePage() {
-        // Masquer la liste déroulante au chargement de la page
-        $('#resultsDropdown').hide();
-
-        // Écouter les changements dans la barre de recherche
-        $('#searchTerm').on('input', performSearch);
-    }
-
-    // Fonction pour effectuer la recherche
-    function performSearch() {
-        var searchTerm = $('#searchTerm').val();
-
-        // Vérifier si la barre de recherche est vide
-        if (searchTerm.trim() === '') {
-            // Masquer la liste déroulante si la barre de recherche est vide
-            $('#resultsDropdown').hide();
-            return;  // Sortir de la fonction sans effectuer la requête
-        }
 
         </table>
         <script>
-        var alimentsInclusArray = <?php echo json_encode($alimentsInclusArray); ?>;
-        var alimentsExclusArray = <?php echo json_encode($alimentsExclusArray); ?>;
+            var alimentsInclusArray = <?php echo json_encode($alimentsInclusArray); ?>;
+            var alimentsExclusArray = <?php echo json_encode($alimentsExclusArray); ?>;
         </script>
         <div id="tableaux-info">
             <!-- Le contenu des tableaux sera affiché ici -->
@@ -125,36 +104,59 @@ try {
             <!-- Le contenu des cocktails sera affiché ici -->
         </div>
 
-        // Effectuer une requête asynchrone vers traitement.php
-        $.ajax({
-            type: 'POST',
-            url: 'traitement_php/traitement_recherche.php',
-            data: { searchTerm: searchTerm },
-            success: function (data) {
-                // Mettre à jour la liste déroulante avec les résultats
-                $('#resultsDropdown').html(data);
-                // Afficher la liste déroulante
-                $('#resultsDropdown').show();
-            },
-            error: function () {
-                console.log('Erreur lors de la requête.');
-            }
-        });
-    }
-
-    // Appeler la fonction d'initialisation au chargement de la page
-    $(document).ready(initializePage);
-</script>
-
-
     </main>
+
+    <script>
+        // Fonction pour initialiser la page
+        function initializePage() {
+            // Masquer la liste déroulante au chargement de la page
+            $('#resultsDropdown').hide();
+
+            // Écouter les changements dans la barre de recherche
+            $('#searchTerm').on('input', performSearch);
+        }
+
+        // Fonction pour effectuer la recherche
+        function performSearch() {
+            var searchTerm = $('#searchTerm').val();
+
+            // Vérifier si la barre de recherche est vide
+            if (searchTerm.trim() === '') {
+                // Masquer la liste déroulante si la barre de recherche est vide
+                $('#resultsDropdown').hide();
+                return;  // Sortir de la fonction sans effectuer la requête
+            }
+
+            // Effectuer une requête asynchrone vers traitement.php
+            $.ajax({
+                type: 'POST',
+                url: 'traitement_php/traitement_recherche.php',
+                data: { searchTerm: searchTerm },
+                success: function (data) {
+                    // Mettre à jour la liste déroulante avec les résultats
+                    $('#resultsDropdown').html(data);
+                    // Afficher la liste déroulante
+                    $('#resultsDropdown').show();
+                },
+                error: function () {
+                    console.log('Erreur lors de la requête.');
+                }
+            });
+        }
+
+        // Appeler la fonction d'initialisation au chargement de la page
+        $(document).ready(initializePage);
+    </script>
+
+
 
 
     <footer>
-        <p> Un site développé par Thomas et Rayan.</p>
+        <p> ©Ma boutique à moi</p>
     </footer>
 </body>
 </html>
+
 <?php
 function ajouterMot($mot, &$alimentsInclusArray)
 {
@@ -171,5 +173,3 @@ function ajouterMot($mot, &$alimentsInclusArray)
 }
 
 ?>
-
-
