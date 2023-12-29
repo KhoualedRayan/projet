@@ -19,13 +19,12 @@ $(document).ready(function () {
 function updateCocktails() {
     $.ajax({
         type: 'POST',
-        url: 'traitement_php/traitement_recherche_cocktail.php', // Mettez le chemin correct ici
+        url: 'traitement_php/traitement_recherche_cocktail.php', 
         data: {
             alimentsInclus: alimentsInclusArray,
             alimentsExclus: alimentsExclusArray
         },
         success: function (response) {
-            // Mettez à jour le contenu du tableau des cocktails
             $('#cocktails-container').html(response);
         },
         error: function (error) {
@@ -75,7 +74,6 @@ function echangerColonne(button) {
 
     // Récupérer le texte de la première colonne (aliment)
     var aliment = row.cells[0].innerText;
-    // Si la colonne d'origine est dans alimentsInclusArray, la déplacer vers alimentsExclusArray et vice versa
     if (aliment != "") {
         // Retirer de alimentsInclusArray
         var index = alimentsInclusArray.indexOf(aliment);
