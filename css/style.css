@@ -103,3 +103,9 @@ footer {
 .hoverable:hover {
     cursor: pointer;
 }
+
+    #resultsDropdown {
+        display: none;
+    }
+
+

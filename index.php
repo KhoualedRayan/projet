@@ -70,46 +70,61 @@ try {
     <main>
         <h2>Tous les Cocktails</h2>
 
-        <?php
-        // Sélectionner tous les cocktails de la table
-        $query = "SELECT * FROM Cocktail";
-        $stmt = $dbco->query($query);
+        <form>
+            <label for="searchTerm">Recherche d'aliments :</label>
+            <input type="text" id="searchTerm" name="searchTerm" oninput="performSearch()">
+        </form>
 
-        // Vérifier s'il y a des résultats
-        if ($stmt->rowCount() > 0) {
-            // Afficher les résultats dans un tableau
-            echo '<table border="1" class="tab-image">';
-            echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                echo '<tr>';
-                // Colonne de la photo
-                $nomCocktail = $row['nomCocktail'];
-                $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
-                $nomCocktail = strtr($nomCocktail, $accents);
-                $imagePath = "Photos/{$nomCocktail}.jpg";
-                if (file_exists($imagePath)) {
-                    echo '<td><img class="cocktail-image" src="' . $imagePath . '" alt="' . $row['nomCocktail'] . '"></td>';
-                } else {
-                    echo '<td class ="cocktail-image"></td>';
-                }
-                // Colonne du nom du cocktail
-                echo '<td>' . $row['nomCocktail'] . '</td>';
-                // Colonne de la préparation
-                echo '<td>' . $row['preparation'] . '</td>';
-                // Colonne des ingrédients
-                echo '<td>' . $row['ingredients'] . '</td>';
-                echo '<td>';
-                echo '<button class="addToCart" data-cocktail="' . htmlspecialchars($row['nomCocktail']) . '">Ajouter au Panier</button>';
+        <select id="resultsDropdown" size="20">
+            <!-- Options de la liste déroulante -->
+        </select>
 
-                echo '</td>';
-                echo '</tr>';
-            }
-            echo '</table>';
-        } else {
-            echo 'Aucun cocktail trouvé.';
-        }
-        ?>
+
     </main>
+
+<script>
+    // Fonction pour initialiser la page
+    function initializePage() {
+        // Masquer la liste déroulante au chargement de la page
+        $('#resultsDropdown').hide();
+
+        // Écouter les changements dans la barre de recherche
+        $('#searchTerm').on('input', performSearch);
+    }
+
+    // Fonction pour effectuer la recherche
+    function performSearch() {
+        var searchTerm = $('#searchTerm').val();
+
+        // Vérifier si la barre de recherche est vide
+        if (searchTerm.trim() === '') {
+            // Masquer la liste déroulante si la barre de recherche est vide
+            $('#resultsDropdown').hide();
+            return;  // Sortir de la fonction sans effectuer la requête
+        }
+
+        // Effectuer une requête asynchrone vers traitement.php
+        $.ajax({
+            type: 'POST',
+            url: 'traitement_php/traitement_recherche.php',
+            data: { searchTerm: searchTerm },
+            success: function (data) {
+                // Mettre à jour la liste déroulante avec les résultats
+                $('#resultsDropdown').html(data);
+                // Afficher la liste déroulante
+                $('#resultsDropdown').show();
+            },
+            error: function () {
+                console.log('Erreur lors de la requête.');
+            }
+        });
+    }
+
+    // Appeler la fonction d'initialisation au chargement de la page
+    $(document).ready(initializePage);
+</script>
+
+
 
 
     <footer>
