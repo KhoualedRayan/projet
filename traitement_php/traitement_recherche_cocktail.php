@@ -43,7 +43,6 @@ $stmt = $dbco->prepare($query);
 $params = array_merge($sousAlimentsInclusListe, $sousAlimentsExclusListe);
 $stmt->execute($params);
 
-
 if ($stmt->rowCount() > 0) {
     // Afficher les résultats dans un tableau
     echo '<table border="1" class="tab-image">';
