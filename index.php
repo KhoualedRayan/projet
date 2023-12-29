@@ -89,6 +89,12 @@ try {
             ajouterMot("Fruit", $alimentsInclusArray);
             ajouterMot("Melon", $alimentsInclusArray);
             ajouterMot("Pastèque", $alimentsInclusArray);
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                $aliment = $_POST['mot'];
+                ajouterMot($aliment,$alimentsInclusArray);
+                header("Location: ".$_SERVER['REQUEST_URI']);
+
+            }
             ?>
 
 
@@ -106,85 +112,6 @@ try {
 
     </main>
 
-    <script>
-
-    function afficherTableauCoteClient(response) {
-    // Effacer le tableau et le reconstruire avec les données mises à jour
-    $('#tableaux-info').empty();
-
-    // Utiliser la réponse JSON pour construire le tableau avec les nouvelles données
-    for (var i = 0; i < response.length; i++) {
-        $('#tableaux-info').append('<tr><td>' + response[i] + '</td></tr>');
-    }
-}
-
-function ajouterUnMot(aliment, aliments_inclus) {
-    // Effectuer une requête AJAX pour appeler la fonction PHP qui ajoute le mot
-    $.ajax({
-        type: 'POST',
-        url: 'traitement_php/ajouterMot.php',
-        data: { mot: aliment, alimentsInclusArray: aliments_inclus },
-        success: function(response) {
-            // La fonction PHP a été appelée avec succès, la réponse est dans 'response'
-            console.log(response);
-
-            // Mettre à jour la liste côté client
-            afficherTableauCoteClient(response);
-        },
-        error: function(error) {
-            // Une erreur s'est produite lors de l'appel de la fonction PHP
-            console.error("Erreur lors de l'appel de la fonction PHP :", error);
-        }
-    });
-}
-
-
-
-
-
-
-
-    function initializePage() {
-        $('#resultsDropdown').hide();
-        $('#searchTerm').on('input', performSearch);
-
-        // Ajouter un gestionnaire d'événements au clic pour les options de la liste déroulante
-        $('#resultsDropdown').on('click', 'option', function () {
-            // Récupérer la valeur de l'option cliquée
-            var selectedAliment = $(this).val();
-            ajouterUnMot(selectedAliment, alimentsInclusArray);
-
-        });
-    }
-
-    function performSearch() {
-        var searchTerm = $('#searchTerm').val();
-
-        if (searchTerm.trim() === '') {
-            $('#resultsDropdown').hide();
-            return;
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: 'traitement_php/traitement_recherche.php',
-            data: { searchTerm: searchTerm },
-            success: function (data) {
-                $('#resultsDropdown').html(data);
-                $('#resultsDropdown').show();
-            },
-            error: function () {
-                console.log('Erreur lors de la requête.');
-            }
-        });
-    }
-
-    $(document).ready(initializePage);
-</script>
-
-
-
-
 
     <footer>
         <p> ©Ma boutique à moi</p>
@@ -197,7 +124,6 @@ function ajouterMot($mot, &$alimentsInclusArray)
 {
     // Rajouter $mot au tableau approprié
     $alimentsInclusArray[] = $mot;
-
     // Afficher la ligne du tableau
     echo '<tr>';
     echo '<td>' . $mot . '</td>';

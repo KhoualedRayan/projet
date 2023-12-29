@@ -14,6 +14,15 @@ $(document).ready(function () {
             }
         });
     });
+    $('#resultsDropdown').hide();
+        $('#searchTerm').on('input', performSearch);
+
+        // Ajouter un gestionnaire d'événements au clic pour les options de la liste déroulante
+        $('#resultsDropdown').on('click', 'option', function () {
+            // Récupérer la valeur de l'option cliquée
+            var selectedAliment = $(this).val();
+            ajouterUnMot(selectedAliment,alimentsInclusArray);
+        });
 
 });
 function updateCocktails() {
@@ -113,3 +122,54 @@ function echangerColonne(button) {
     row.cells[3].innerHTML = cell1;
     updateTableauxInfo();
 }
+
+function ajouterUnMot(aliment, aliments_inclus) {
+    // Effectuer une requête AJAX pour appeler la fonction PHP qui ajoute le mot
+    $.ajax({
+        type: 'POST',
+        url: 'index.php',
+        data: { mot: aliment, alimentsInclusArray: aliments_inclus },
+        success: function(response) {
+            // La fonction PHP a été appelée avec succès, la réponse est dans 'response'
+            console.log("--------"+response+"------------");
+
+        },
+        error: function(error) {
+            // Une erreur s'est produite lors de l'appel de la fonction PHP
+            console.error("Erreur lors de l'appel de la fonction PHP :", error);
+        }
+    });
+}
+
+
+
+
+
+
+
+    function initializePage() {
+        
+    }
+
+    function performSearch() {
+        var searchTerm = $('#searchTerm').val();
+
+        if (searchTerm.trim() === '') {
+            $('#resultsDropdown').hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'traitement_php/traitement_recherche.php',
+            data: { searchTerm: searchTerm },
+            success: function (data) {
+                $('#resultsDropdown').html(data);
+                $('#resultsDropdown').show();
+            },
+            error: function () {
+                console.log('Erreur lors de la requête.');
+            }
+        });
+    }
+
