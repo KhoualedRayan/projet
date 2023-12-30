@@ -7,7 +7,7 @@ $(document).ready(function () {
             data: { nomCocktail: nomCocktail },
             success: function (response) {
                 console.log(nomCocktail);
-                alert('Cocktail ajouté au panier avec succès !');
+                alert('Cocktail ajoute au panier avec succes !');
             },
             error: function (error) {
                 console.error('Erreur lors de l\'ajout au panier :', error);

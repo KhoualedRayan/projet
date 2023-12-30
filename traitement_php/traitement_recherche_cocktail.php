@@ -4,6 +4,7 @@ include '../Donnees.inc.php';
 $servname = 'localhost';
 $dbname = 'MaBase';
 $user = 'root';
+
 $pass = '';
 session_start();
 
@@ -64,7 +65,9 @@ if ($stmt->rowCount() > 0) {
         echo '<tr>';
         // Colonne de la photo
         $nomCocktail = $row['nomCocktail'];
+        $nomCocktail = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $nomCocktail);
         $accents = array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ï' => 'i', 'ñ' => 'n', "'" => '', " " => '_');
+
         $nomCocktail = strtr($nomCocktail, $accents);
         $imagePath = "../../projet/Photos/{$nomCocktail}.jpg";
         if (file_exists($imagePath)) {
@@ -86,7 +89,7 @@ if ($stmt->rowCount() > 0) {
     echo '</table>';
 } else {
     if (!empty($sousAlimentsInclusListe) || !empty($sousAlimentsExclusListe))
-        echo 'Aucun cocktail trouvé.';
+        echo 'Aucun cocktail trouv&eacute;.';
 }
 function getSousAliments($dbco, $aliment)
 {

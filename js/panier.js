@@ -8,7 +8,7 @@ $(document).ready(function () {
             success: function (response) {
                 console.log(idCocktail);
                 location.reload();
-                alert('Cocktail supprimé du panier avec succès !');
+                alert('Cocktail supprime du panier avec succes !');
                 
             },
             error: function (error) {
@@ -25,7 +25,7 @@ $(document).ready(function () {
             success: function (response) {
                 console.log(dateCocktail);
                 location.reload();
-                alert('Cocktail supprimé du panier temporaire avec succès !');
+                alert('Cocktail supprime du panier temporaire avec succes !');
                 
             },
             error: function (error) {
