@@ -10,7 +10,7 @@ session_start();
 try {
     $dbco = new PDO("mysql:host=$servname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $dbco->exec("USE $dbname"); // Sélectionner la base de données
+    $dbco->exec("USE $dbname"); 
 } catch (PDOException $e) {
     echo "Erreur : " . $e->getMessage();
 }
@@ -41,7 +41,9 @@ if (!empty($sousAlimentsExclusListe)) {
 $stmt = $dbco->prepare($query);
 
 $params = array_merge($sousAlimentsInclusListe, $sousAlimentsExclusListe);
-$stmt->execute($params);
+if(!empty($sousAlimentsInclusListe) || !empty($sousAlimentsExclusListe))
+    $stmt->execute($params);
+
 
 if ($stmt->rowCount() > 0) {
     // Afficher les résultats dans un tableau
@@ -72,7 +74,8 @@ if ($stmt->rowCount() > 0) {
     }
     echo '</table>';
 } else {
-    echo 'Aucun cocktail trouvé.';
+    if (!empty($sousAlimentsInclusListe) || !empty($sousAlimentsExclusListe))
+        echo 'Aucun cocktail trouvé.';
 }
 function getSousAliments($dbco, $aliment)
 {
