@@ -50,7 +50,8 @@ $query .= " GROUP BY c.nomCocktail
 $stmt = $dbco->prepare($query);
 
 $params = array_merge($sousAlimentsInclusListe, $sousAlimentsExclusListe);
-$stmt->execute($params);
+if(!empty($sousAlimentsInclusListe)|| !empty($sousAlimentsExclusListe))
+    $stmt->execute($params);
 
 
 
