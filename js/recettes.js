@@ -13,7 +13,7 @@ $(document).ready(function () {
             }
         });
     }
-    // Charger les sous-aliments initiaux pour la catégorie "Aliment"
+    // Charge les sous-aliments initiaux pour la catégorie "Aliment"
     chargerSousAliments("Aliment");
 
     // Fonction de gestion du clic sur un élément

@@ -11,7 +11,7 @@ try {
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $dbco = new PDO("mysql:host=$servname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $dbco->exec("USE $dbname"); // S�lectionner la base de donn�es
+    $dbco->exec("USE $dbname"); // Selectionner la base de donn�es
 } catch (PDOException $e) {
 
     echo "Erreur : " . $e->getMessage();

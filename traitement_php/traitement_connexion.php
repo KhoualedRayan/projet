@@ -31,10 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (password_verify($mdp, $user['motDePasse'])) {
             session_start();
-            // Stocker des informations de connexion dans la session
+            // Stocke des informations de connexion dans la session
             $_SESSION['utilisateur_connecte'] = true;
             $_SESSION['nom_utilisateur'] = $login;
-            // Compléter le panier avec le panier temporaire
+            // Compléte le panier avec le panier temporaire
             completerPanier($dbco, $login);
 
             echo "Connexion réussi ! Redirection vers la page de l'index.";

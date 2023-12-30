@@ -16,7 +16,6 @@ try {
 
 // Traitement du formulaire d'inscription
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Récupérer les données du formulaire
     $login = $_POST["login"];
     // Verif login unique
     $verifLogin = $dbco->prepare("SELECT COUNT(*) FROM utilisateur WHERE login = ?");
@@ -42,14 +41,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-    // Validation des données (ajoutez des validations supplémentaires selon vos besoins)
+    // Validation des données
     if (empty($login) || empty($mdp)) {
         echo "Veuillez remplir les champs obligatoires du formulaire.";
     } else {
-        // Hasher le mot de passe (pour des raisons de sécurité)
+        // Hasher le mot de passe
         $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT);
 
-        // Préparer la requête pour insérer le compte dans la base de données
+        // Prépare la requête pour insérer le compte dans la base de données
         $stmt = $dbco->prepare("INSERT INTO utilisateur (login, motDePasse, nom, prenom, sexe, mail, dateNaissance, adresse, codePostal, ville, numTelephone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bindParam(1, $login);
         $stmt->bindParam(2, $hashedPassword);

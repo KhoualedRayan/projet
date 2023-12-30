@@ -35,7 +35,6 @@ if (isset($_POST['nomCocktail'])) {
         //Utilisateur pas connecté, stockage temporaire
         //stocker les cocktails temporairement
         if (!isset($_SESSION['panier_temporaire'])) {
-            // Si la variable de session pour le panier temporaire n'existe pas, initialisez-la
             $_SESSION['panier_temporaire'] = array();
         }
         $cocktailTemporaire = array(

@@ -22,29 +22,41 @@ $sousAlimentsInclusListe = getSousAlimentsListe($dbco, $alimentsInclusArray);
 $sousAlimentsExclusListe = getSousAlimentsListe($dbco, $alimentsExclusArray);
 
 
-$query = "SELECT * FROM Cocktail WHERE 1";
+$query = "SELECT
+              *,
+              c.nomCocktail AS NomRecette,
+              COUNT(l.nomAlimentU) AS Score
+          FROM
+              Cocktail c
+          JOIN
+              Liaison l ON c.nomCocktail = l.nomCocktailU
+          WHERE 1";
 
 if (!empty($sousAlimentsInclusListe)) {
-    $query .= " AND nomCocktail IN (
-        SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+    $query .= " AND l.nomAlimentU IN (";
     $query .= implode(',', array_fill(0, count($sousAlimentsInclusListe), '?'));
-    $query .= "))";
+    $query .= ")";
 }
 
 if (!empty($sousAlimentsExclusListe)) {
-    $query .= " AND nomCocktail NOT IN (
-        SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+    $query .= " AND l.nomAlimentU NOT IN (";
     $query .= implode(',', array_fill(0, count($sousAlimentsExclusListe), '?'));
-    $query .= "))";
+    $query .= ")";
 }
+
+$query .= " GROUP BY c.nomCocktail
+            ORDER BY Score DESC";
 
 $stmt = $dbco->prepare($query);
 
 $params = array_merge($sousAlimentsInclusListe, $sousAlimentsExclusListe);
 $stmt->execute($params);
 
+
+
+
 if ($stmt->rowCount() > 0) {
-    // Afficher les résultats dans un tableau
+    // Affiche les résultats dans un tableau
     echo '<table border="1" class="tab-image">';
     echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Pr&eacute;paration</th><th>Ingr&eacute;dients</th><th>Panier</th></tr>';
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
