@@ -18,10 +18,9 @@ $(document).ready(function () {
     $('#searchTerm').on('input', performSearch);
 
     $('#resultsDropdown').on('click', 'option', function () {
-        // Récupére la valeur de l'option cliquée
-        var selectedAliment = $(this).val();
-        selectedAliment = selectedAliment.replace(/'/g, '&#39;');
+        var selectedAliment = $(this).text();
         alimentsInclusArray.push(selectedAliment);
+        console.log(selectedAliment);
         var newRowHtml = '<tr>' +
             '<td>' + selectedAliment + '</td>' +
             '<td class="tab-image-filtre"><img src="images/supprimer.png" alt="Supprimer" onclick="supprimerLigne(this)"></td>' +
@@ -29,9 +28,11 @@ $(document).ready(function () {
             '<td></td>' +
             '</tr>';
 
-        $('#tab-aliments').append(newRowHtml); 
+        $('#tab-aliments').append(newRowHtml);
         updateTableauxInfo();
+
     });
+
 
 });
 function updateCocktails() {
