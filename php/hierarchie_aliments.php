@@ -6,7 +6,7 @@ $pass = '';
 
 session_start();
 
-// Initialiser la session 'fil' comme un tableau si ce n'est pas déjà le cas
+// Initialise la session 'fil' comme un tableau si ce n'est pas déjà le cas
 if (!isset($_SESSION['fil']) || !is_array($_SESSION['fil'])) {
     $_SESSION['fil'] = array();
 }
@@ -38,7 +38,7 @@ try {
         $_SESSION['fil'][] = 'Aliment';
         $_SESSION['fil'] = array_reverse($_SESSION['fil']);
 
-        // Afficher le fil d'Ariane avec des liens cliquables
+        // Affiche le fil d'Ariane avec des liens cliquables
         echo "<p id='fil_ariane'>Fil d'Ariane : ";
         foreach ($_SESSION['fil'] as $i => $motAriane) {
             if ($i > 0) {
@@ -49,7 +49,7 @@ try {
         echo "</p>";
     }
 
-    // Récupérer les sous-aliments actuels
+    // Récupére les sous-aliments actuels
     $motSousAliments = $mot;
     $querySousAliments = "SELECT nomAliment FROM Aliment WHERE pereAliment = :motSousAliments";
     $stmtSousAliments = $dbco->prepare($querySousAliments);
@@ -75,11 +75,11 @@ try {
 
         $sousAliments = getSousAliments($dbco, $ss_aliment);
 
-        // Utiliser la liste des sous-aliments pour construire la requête SQL
+        // Utilise la liste des sous-aliments pour construire la requête SQL
         $query = "SELECT * FROM Cocktail WHERE nomCocktail IN (
     SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
 
-        // Ajouter les sous-aliments à la liste
+        // Ajoute les sous-aliments à la liste
         $query .= implode(',', array_fill(0, count($sousAliments), '?'));
         $query .= "))";
 
@@ -87,9 +87,9 @@ try {
         $stmt->execute($sousAliments);
 
 
-        // Vérifier s'il y a des résultats
+        // Vérifie s'il y a des résultats
         if ($stmt->rowCount() > 0) {
-            // Afficher les résultats dans un tableau
+            // Affiche les résultats dans un tableau
             echo '<table border="1" class="tab-image">';
             echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -120,13 +120,13 @@ try {
             echo 'Aucun cocktail trouvé.';
         }
     } else {
-        // Sélectionner tous les cocktails de la table
+        // Sélectionne tous les cocktails de la table
         $query = "SELECT * FROM Cocktail";
         $stmt = $dbco->query($query);
 
-        // Vérifier s'il y a des résultats
+        // Vérifie s'il y a des résultats
         if ($stmt->rowCount() > 0) {
-            // Afficher les résultats dans un tableau
+            // Affiche les résultats dans un tableau
             echo '<table border="1" class="tab-image">';
             echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Préparation</th><th>Ingrédients</th><th>Panier</th></tr>';
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

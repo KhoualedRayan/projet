@@ -74,7 +74,6 @@ function supprCompte($dbco, $nomUtilisateur)
         exit();
 
     } catch (PDOException $e) {
-        // En cas d'erreur, tu peux renvoyer un message d'erreur
         echo "Erreur : " . $e->getMessage();
     }
 
@@ -123,7 +122,7 @@ function modifProfil($dbco)
             }
 
 
-            // Exécuter la mise à jour
+            // Exécute la mise à jour
             if ($stmtUpdate->execute())
                 reussiteModification();
             else
@@ -142,7 +141,6 @@ function echecModification()
 function reussiteModification()
 {
     echo "Modification du profil réussi ! Redirection vers la page de la page de profil.";
-    //
     header("Location: ../php/profil.php");
     exit();
 }

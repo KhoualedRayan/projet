@@ -52,8 +52,11 @@ $stmt = $dbco->prepare($query);
 $params = array_merge($sousAlimentsInclusListe, $sousAlimentsExclusListe);
 $stmt->execute($params);
 
+
+
+
 if ($stmt->rowCount() > 0) {
-    // Afficher les résultats dans un tableau
+    // Affiche les résultats dans un tableau
     echo '<table border="1" class="tab-image">';
     echo '<tr class="tab-image-ligne"><th>Photo</th><th>Nom du Cocktail</th><th>Pr&eacute;paration</th><th>Ingr&eacute;dients</th><th>Panier</th></tr>';
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

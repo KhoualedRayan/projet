@@ -79,7 +79,6 @@ try {
         <br />
         <div class="recherche">
             <select id="resultsDropdown" size="20">
-                <!-- Options de la liste déroulante -->
             </select>
 
             <table border="1" id="tab-aliments" class="tab-image">
@@ -94,7 +93,6 @@ try {
             var alimentsExclusArray = <?php echo json_encode($alimentsExclusArray); ?>;
         </script>
         <div id="cocktails-container">
-            <!-- Le contenu des cocktails sera affiché ici -->
         </div>
 
     </main>

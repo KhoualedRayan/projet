@@ -11,7 +11,7 @@ try {
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $dbco = new PDO("mysql:host=$servname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $dbco->exec("USE $dbname"); // S�lectionner la base de donn�es
+    $dbco->exec("USE $dbname"); // Selectionne la base de donnees
 } catch (PDOException $e) {
 
     echo "Erreur : " . $e->getMessage();
@@ -33,10 +33,10 @@ try {
         <div id="compte">
             <?php
             if (isset($_SESSION['utilisateur_connecte'])) {
-                // Récupérer le nom de l'utilisateur depuis la session
+                // Récupére le nom de l'utilisateur depuis la session
                 $nomUtilisateur = $_SESSION['nom_utilisateur'];
 
-                // Afficher le nom de l'utilisateur dans le HEADER
+                // Affiche le nom de l'utilisateur dans le HEADER
                 echo 'Bienvenue, ' . $nomUtilisateur . '!';
             }
 

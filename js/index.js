@@ -18,7 +18,7 @@ $(document).ready(function () {
     $('#searchTerm').on('input', performSearch);
 
     $('#resultsDropdown').on('click', 'option', function () {
-        // Récupérer la valeur de l'option cliquée
+        // Récupére la valeur de l'option cliquée
         var selectedAliment = $(this).val();
         selectedAliment = selectedAliment.replace(/'/g, '&#39;');
         alimentsInclusArray.push(selectedAliment);
@@ -69,7 +69,7 @@ function updateTableauxInfo() {
 function supprimerLigne(button) {
     var row = button.parentNode.parentNode;
 
-    // Récupérer le texte de la première colonne (aliment)
+    // Récupére le texte de la première colonne (aliment)
     var aliment = row.cells[0].innerText;
 
     // Si la colonne d'origine est dans alimentsInclusArray, le retirer de alimentsInclusArray
@@ -87,7 +87,7 @@ function supprimerLigne(button) {
         }
     }
     console.log('Aliments supprimé :', aliment);
-    // Supprimer la ligne du tableau
+    // Supprime la ligne du tableau
     row.parentNode.removeChild(row);
     updateTableauxInfo();
 }
@@ -96,30 +96,30 @@ function supprimerLigne(button) {
 function echangerColonne(button) {
     var row = button.parentNode.parentNode;
 
-    // Récupérer le texte de la première colonne (aliment)
+    // Récupére le texte de la première colonne (aliment)
     var aliment = row.cells[0].innerText;
     if (aliment != "") {
-        // Retirer de alimentsInclusArray
+        // Retire de alimentsInclusArray
         var index = alimentsInclusArray.indexOf(aliment);
         if (index !== -1) {
             alimentsInclusArray.splice(index, 1);
         }
-        // Ajouter à alimentsExclusArray
+        // Ajoute à alimentsExclusArray
         alimentsExclusArray.push(aliment);
         console.log('Aliments devient exclus :', aliment);
     } else {
         aliment = row.cells[3].innerText;
-        // Retirer de alimentsExclusArray
+        // Retire de alimentsExclusArray
         var index = alimentsExclusArray.indexOf(aliment);
         if (index !== -1) {
             alimentsExclusArray.splice(index, 1);
         }
-        // Ajouter à alimentsInclusArray
+        // Ajoute à alimentsInclusArray
         alimentsInclusArray.push(aliment);
         console.log('Aliments devient inclus :', aliment);
     }
 
-    // Inverser la position des cellules 
+    // Inverse la position des cellules 
     var cell1 = row.cells[0].innerHTML;
     var cell2 = row.cells[3].innerHTML;
 
@@ -150,6 +150,14 @@ function performSearch() {
         error: function () {
             console.log('Erreur lors de la requête.');
         }
+    });
+
+    document.getElementById('searchTerm').addEventListener('keydown', function(event) {
+      // Vérifier si la touche appuyée est Entrée
+      if (event.key === 'Enter') {
+        // Annuler l'événement (empêcher la soumission du formulaire)
+        event.preventDefault();
+      }
     });
 }
 
