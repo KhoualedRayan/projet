@@ -20,6 +20,7 @@ $(document).ready(function () {
     $('#resultsDropdown').on('click', 'option', function () {
         // Récupérer la valeur de l'option cliquée
         var selectedAliment = $(this).val();
+        selectedAliment = selectedAliment.replace(/'/g, '&#39;');
         alimentsInclusArray.push(selectedAliment);
         var newRowHtml = '<tr>' +
             '<td>' + selectedAliment + '</td>' +

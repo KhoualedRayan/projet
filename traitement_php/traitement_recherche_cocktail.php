@@ -10,7 +10,7 @@ session_start();
 try {
     $dbco = new PDO("mysql:host=$servname", $user, $pass);
     $dbco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $dbco->exec("USE $dbname"); 
+    $dbco->exec("USE $dbname");
 } catch (PDOException $e) {
     echo "Erreur : " . $e->getMessage();
 }
@@ -22,28 +22,35 @@ $sousAlimentsInclusListe = getSousAlimentsListe($dbco, $alimentsInclusArray);
 $sousAlimentsExclusListe = getSousAlimentsListe($dbco, $alimentsExclusArray);
 
 
-$query = "SELECT * FROM Cocktail WHERE 1";
+$query = "SELECT
+              *,
+              c.nomCocktail AS NomRecette,
+              COUNT(l.nomAlimentU) AS Score
+          FROM
+              Cocktail c
+          JOIN
+              Liaison l ON c.nomCocktail = l.nomCocktailU
+          WHERE 1";
 
 if (!empty($sousAlimentsInclusListe)) {
-    $query .= " AND nomCocktail IN (
-        SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+    $query .= " AND l.nomAlimentU IN (";
     $query .= implode(',', array_fill(0, count($sousAlimentsInclusListe), '?'));
-    $query .= "))";
+    $query .= ")";
 }
 
 if (!empty($sousAlimentsExclusListe)) {
-    $query .= " AND nomCocktail NOT IN (
-        SELECT nomCocktailU FROM Liaison WHERE nomAlimentU IN (";
+    $query .= " AND l.nomAlimentU NOT IN (";
     $query .= implode(',', array_fill(0, count($sousAlimentsExclusListe), '?'));
-    $query .= "))";
+    $query .= ")";
 }
+
+$query .= " GROUP BY c.nomCocktail
+            ORDER BY Score DESC";
 
 $stmt = $dbco->prepare($query);
 
 $params = array_merge($sousAlimentsInclusListe, $sousAlimentsExclusListe);
-if(!empty($sousAlimentsInclusListe) || !empty($sousAlimentsExclusListe))
-    $stmt->execute($params);
-
+$stmt->execute($params);
 
 if ($stmt->rowCount() > 0) {
     // Afficher les résultats dans un tableau
