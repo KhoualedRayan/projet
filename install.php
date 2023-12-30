@@ -23,7 +23,7 @@ $utilisateur = "CREATE TABLE Utilisateur (
 $cocktail = "CREATE TABLE Cocktail(
              nomCocktail VARCHAR (100) PRIMARY KEY,
              ingredients VARCHAR (255),
-             preparation VARCHAR (255))";
+             preparation VARCHAR (1000))";
 
 $aliment = "CREATE TABLE Aliment(
             nomAliment VARCHAR (60) PRIMARY KEY,
